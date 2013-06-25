@@ -54,3 +54,5 @@ autoload -U colors; colors
 alias g=git
 alias v=vim
 alias ls='ls --color=auto'
+
+PATH=${HOME}/bin:$PATH
