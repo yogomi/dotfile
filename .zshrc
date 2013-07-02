@@ -5,7 +5,7 @@ export EDITOR=vim
 export LANG=ja_JP.UTF-8
 export AUTOFEATURE=true
 
-bindkey -v
+bindkey -e
 
 setopt auto_cd
 setopt correct
@@ -54,3 +54,20 @@ autoload -U colors; colors
 alias g=git
 alias v=vim
 alias ls='ls --color=auto'
+
+# google search<<<
+function google() {
+  local str opt
+  if [ $# != 0 ]; then
+    for i in $*; do
+      str="$str+$i"
+    done
+    str=`echo $str | sed 's/^\+//'`
+    opt='search?num=50&hl=ja&lr=lang_ja'
+    opt="${opt}&q=${str}"
+  fi
+  w3m http://www.google.co.jp/$opt
+}
+#>>>
+
+PATH=${HOME}/bin:$PATH
