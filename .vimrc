@@ -170,4 +170,9 @@ set expandtab
 set autoindent
 set hlsearch
 set number
+" タブと行末の空白を可視化
+set list
+set listchars=tab:>-,trail:~
+
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
+set cursorline
