@@ -66,7 +66,11 @@ filetype plugin indent on     " Required!
 " Installation check.
 NeoBundleCheck
 
-set pastetoggle=<F10>
+set pastetoggle=<F12>
+
+""" key bind
+nnoremap <Space>. :<C-u>edit $MYVIMRC<Enter>
+nnoremap <Space>s. :<C-u>source $MYVIMRC<Enter>
 
 """ view
 syntax on
