@@ -39,7 +39,7 @@ setopt share_history
 setopt hist_reduce_blanks
 
 ### Ls Color ###
-export LSCOLORS=exfxcxdxbxegedabagacad
+export LSCOLORS=gxfxcxdxbxegedabagacad
 export LS_COLORS='di=34;01:ln=36;01:so=32:pi=33:ex=32;01:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export ZLS_COLORS=$LS_COLORS
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
@@ -53,7 +53,14 @@ autoload -U colors; colors
 
 alias g=git
 alias v=vim
-alias ls='ls --color=auto'
+case "${OSTYPE}" in
+darwin*)
+    alias ls='ls -G'
+    ;;
+linux*)
+    alias ls='ls --color=auto'
+    ;;
+esac
 
 # google search<<<
 function google() {
@@ -70,4 +77,8 @@ function google() {
 }
 #>>>
 
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+unalias run-help
+autoload run-help
+HELPDIR=/usr/local/share/zsh/helpfiles
 PATH=${HOME}/bin:$PATH
