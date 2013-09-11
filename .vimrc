@@ -56,7 +56,6 @@ NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
 " ...
 
-filetype plugin indent on     " Required!
 "
 " Brief help
 " :NeoBundleList          - list configured bundles
@@ -176,3 +175,4 @@ set listchars=tab:>-,trail:~
 
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 set cursorline
+filetype plugin indent on     " Required!
