@@ -35,6 +35,17 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 
+NeoBundle 'yogomi/Flake8-vim', 'preparationForPython2.6'
+let g:PyFlakeOnQrite = 1
+let g:PyFlakeCheckers = 'pep8,mccabe,pyflakes'
+let g:PyFlakeDefaultComplexity=10
+let g:PyFlakeCWindow = 9
+let g:PyFlakeSigns = 1
+let g:PyFlakeMaxLineLength = 100
+let g:PyFlakeRangeCommand = 'Q'
+
+NeoBundle 'thinca/vim-quickrun'
+
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/neocomplcache-clang'
@@ -157,10 +168,13 @@ let g:neocomplcache_clang_user_options =
     \ '-fms-extensions -gnu-runtime ' .
     \ '-include malloc.h '
 
+set t_Co=256
+set fileformats=unix,dos
 set incsearch
 set ignorecase
 " 大文字小文字の両方が含まれる場合のみ大文字小文字を区別
 set smartcase
+set shiftround
 set softtabstop=4
 set tabstop=8
 set shiftwidth=4
@@ -176,3 +190,9 @@ set listchars=tab:>-,trail:~
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 set cursorline
 filetype plugin indent on     " Required!
+if has('path_extra')
+    set tags& tags+=.tags,tags
+endif
+set showtabline=2
+set laststatus=2
+set ambiwidth=double
