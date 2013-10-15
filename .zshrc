@@ -14,6 +14,8 @@ setopt prompt_subst
 setopt notify
 setopt equals
 
+RPROMPT='[%d]'
+
 ### complement ###
 autoload -U compinit;
 compinit
