@@ -82,6 +82,24 @@ set pastetoggle=<F12>
 nnoremap <Space>. :<C-u>edit $MYVIMRC<Enter>
 nnoremap <Space>s. :<C-u>source $MYVIMRC<Enter>
 
+" ---- insert mode ---- {{{
+"emacs like key-bind in insert mode
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+inoremap <C-p> <Up>
+inoremap <C-n> <Down>
+inoremap <C-h> <Backspace>
+inoremap <C-d> <Del>
+
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-h> <Backspace>
+cnoremap <C-d> <Del>
+
 """ view
 syntax on
 
