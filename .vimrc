@@ -118,6 +118,9 @@ if has("autocmd")
   \  endif
 endif
 
+""" cpplint
+autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
+"""
 
 """ neocomplcache
 " 補完ウィンドウの設定
