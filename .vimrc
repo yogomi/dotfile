@@ -78,7 +78,7 @@ NeoBundle 'funorpain/vim-cpplint'
 " Installation check.
 NeoBundleCheck
 
-set pastetoggle=<F12>
+set pastetoggle=<F10>
 
 """ key bind
 nnoremap <Space>. :<C-u>edit $MYVIMRC<Enter>
