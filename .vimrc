@@ -45,7 +45,6 @@ let g:PyFlakeSigns = 1
 let g:PyFlakeMaxLineLength = 100
 let g:PyFlakeRangeCommand = 'Q'
 
-NeoBundle 'vim-scripts/Flake8-vim'
 NeoBundle 'thinca/vim-quickrun'
 
 NeoBundle 'altercation/vim-colors-solarized'
