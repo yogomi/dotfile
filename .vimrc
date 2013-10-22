@@ -7,6 +7,10 @@ if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
+augroup MyAutoCmd
+    autocmd!
+augroup END
+
 call neobundle#rc(expand('~/.vim/bundle/'))
 
  " Let NeoBundle manage NeoBundle
@@ -50,6 +54,12 @@ NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/neocomplcache-clang'
+NeoBundle 'kana/vim-smartinput'
+NeoBundleLazy 'kana/vim-smartchr', {
+            \ 'autoload' : {
+            \'function_prefix' : 'smartchr',
+            \ }}
+
 NeoBundleLazy 'Shougo/unite.vim', {
             \ 'autoload' : {
             \   'commands' : ["Unite"
@@ -63,7 +73,7 @@ NeoBundle 'rails.vim'
 " Non github repos
 NeoBundle 'git://git.wincent.com/command-t.git'
 " Non git repos
-NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+" NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 NeoBundle 'funorpain/vim-cpplint'
 
@@ -120,6 +130,29 @@ endif
 
 """ cpplint
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
+"""
+
+""" smartchr
+autocmd MyAutoCmd
+            \ FileType python
+            \ call s:def_smartchr()
+
+autocmd MyAutoCmd
+            \ FileType javascript
+            \ call s:def_smartchr()
+
+function! s:def_smartchr()
+    let l:lang = &filetype
+    if l:lang == 'python'
+        inoremap <buffer> <expr> = smartchr#one_of(' = ', ' == ', '=')
+        inoremap <buffer> <expr> # smartchr#one_of('# ', '#')
+        inoremap <buffer> <expr> & smartchr#loop('&', ' and ')
+        inoremap <buffer> <expr> <Bar> smartchr#loop('\|', ' or ')
+    elseif l:lang == 'javascript'
+        inoremap <buffer> <expr> = smartchr#one_of(' = ', ' == ', ' === ', '=')
+        inoremap <buffer> <expr> -> smartchr#one_of('function', '->')
+    endif
+endfunction
 """
 
 """ neocomplcache
@@ -219,3 +252,4 @@ endif
 set showtabline=2
 set laststatus=2
 set ambiwidth=double
+set noswapfile
