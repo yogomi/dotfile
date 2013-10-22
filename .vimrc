@@ -1,6 +1,7 @@
 " vim:fileencoding=utf-8
 
 set nocompatible
+filetype plugin on
 
 if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -44,6 +45,7 @@ let g:PyFlakeSigns = 1
 let g:PyFlakeMaxLineLength = 100
 let g:PyFlakeRangeCommand = 'Q'
 
+NeoBundle 'vim-scripts/Flake8-vim'
 NeoBundle 'thinca/vim-quickrun'
 
 NeoBundle 'altercation/vim-colors-solarized'
@@ -64,6 +66,7 @@ NeoBundle 'git://git.wincent.com/command-t.git'
 " Non git repos
 NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+NeoBundle 'funorpain/vim-cpplint'
 
 " ...
 
