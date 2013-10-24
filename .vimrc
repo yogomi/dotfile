@@ -54,7 +54,6 @@ NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/neocomplcache-clang'
-NeoBundle 'kana/vim-smartinput'
 NeoBundleLazy 'kana/vim-smartchr', {
             \ 'autoload' : {
             \'function_prefix' : 'smartchr',
