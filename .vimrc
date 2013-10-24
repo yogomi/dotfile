@@ -217,7 +217,11 @@ inoremap <expr><C-e> neocomplcache#cancel_popup()
 """ neocomplcache_clang
 " snippets expand key
 let g:neocomplcache_clang_use_library = 1
-let g:neocomplcache_clang_library_path = '/usr/share/clang'
+if has('mac')
+    let g:neocomplcache_clang_library_path = '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
+else
+    let g:neocomplcache_clang_library_path = '/usr/share/clang'
+endif
 let g:neocomplcache_clang_user_options = 
     \ '-I /usr/includ ' .
     \ '-I /usr/include/AL ' .
