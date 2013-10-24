@@ -12,7 +12,7 @@ echo ${PWD}
 
 for file in ${DOTFILES}
 do
-    rm -f ${HOME}/${file}
+    rm -rf ${HOME}/${file}
     ln -sf ${PWD}/${file} ${HOME}/${file}
 done
 
