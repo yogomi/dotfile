@@ -83,4 +83,4 @@ export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 unalias run-help
 autoload run-help
 HELPDIR=/usr/local/share/zsh/helpfiles
-PATH=${HOME}/bin:$PATH
+PATH=${HOME}/bin:${HOME}/.tmux/bin:$PATH

@@ -3,7 +3,7 @@
 
 PWD=`pwd`
 BACKUP_DIR=${PWD}/backup
-DOTFILES=".vimrc .zshrc .vim .tmux.conf"
+DOTFILES=".vimrc .zshrc .vim .tmux .tmux.conf"
 
 NEOBUNDLE_GIT_URL="git://github.com/Shougo/neobundle.vim"
 NEOBUNDLE_DIST_DIR="${PWD}/.vim/bundle/neobundle.vim"

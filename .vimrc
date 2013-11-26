@@ -11,6 +11,8 @@ augroup MyAutoCmd
     autocmd!
 augroup END
 
+let ostype = system('uname')
+
 call neobundle#rc(expand('~/.vim/bundle/'))
 
  " Let NeoBundle manage NeoBundle
@@ -54,10 +56,6 @@ NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/neocomplcache-clang'
-NeoBundleLazy 'kana/vim-smartchr', {
-            \ 'autoload' : {
-            \'function_prefix' : 'smartchr',
-            \ }}
 
 NeoBundleLazy 'Shougo/unite.vim', {
             \ 'autoload' : {
@@ -131,28 +129,6 @@ endif
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
 """
 
-""" smartchr
-autocmd MyAutoCmd
-            \ FileType python
-            \ call s:def_smartchr()
-
-autocmd MyAutoCmd
-            \ FileType javascript
-            \ call s:def_smartchr()
-
-function! s:def_smartchr()
-    let l:lang = &filetype
-    if l:lang == 'python'
-        inoremap <buffer> <expr> = smartchr#one_of(' = ', ' == ', '=')
-        inoremap <buffer> <expr> # smartchr#one_of('# ', '#')
-        inoremap <buffer> <expr> & smartchr#loop('&', ' and ')
-        inoremap <buffer> <expr> <Bar> smartchr#loop('\|', ' or ')
-    elseif l:lang == 'javascript'
-        inoremap <buffer> <expr> = smartchr#one_of(' = ', ' == ', ' === ', '=')
-        inoremap <buffer> <expr> -> smartchr#one_of('function', '->')
-    endif
-endfunction
-"""
 
 """ neocomplcache
 " 補完ウィンドウの設定
