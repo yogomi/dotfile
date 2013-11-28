@@ -232,3 +232,15 @@ set showtabline=2
 set laststatus=2
 set ambiwidth=double
 set noswapfile
+
+""" highlight
+highlight Title term=bold ctermfg=121 gui=bold guifg=#60ff60
+"""
+
+function! GetCursorSyntaxGroup()
+    echo "hi<" .synIDattr(synID(line("."), col("."), 1), "name") . '> trans<'
+        \   . synIDattr(synID(line("."), col("."), 0), "name") . '> lo<'
+        \   . synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name") . ">"
+endfunction
+
+map <Leader>s :call GetCursorSyntaxGroup()<CR>
