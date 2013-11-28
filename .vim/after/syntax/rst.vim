@@ -9,5 +9,7 @@ set cpo&vim
 
 syn match   rstTableLines           contained display '|\|+\%(=\+\|-\+\)\='
 
+hi link rstTableLines               PreProc
+
 let &cpo = s:cpo_save
 unlet s:cpo_save
