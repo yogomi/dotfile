@@ -42,6 +42,13 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 
+""" for html and js
+NeoBundle 'mattn/emmet-vim'
+NeoBundle 'othree/html5.vim'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'hail2u/vim-css3-syntax'
+"""
+
 NeoBundle 'yogomi/Flake8-vim', 'preparationForPython2.6'
 let g:PyFlakeOnQrite = 1
 let g:PyFlakeCheckers = 'pep8,mccabe,pyflakes'
@@ -210,9 +217,9 @@ set ignorecase
 " 大文字小文字の両方が含まれる場合のみ大文字小文字を区別
 set smartcase
 set shiftround
-set softtabstop=4
+set softtabstop=2
 set tabstop=8
-set shiftwidth=4
+set shiftwidth=2
 set backspace=indent,eol,start
 set expandtab
 set autoindent

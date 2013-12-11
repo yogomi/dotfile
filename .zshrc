@@ -83,7 +83,7 @@ export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 unalias run-help
 autoload run-help
 HELPDIR=/usr/local/share/zsh/helpfiles
-PATH=${HOME}/bin:${HOME}/.tmux/bin:$PATH
 
 eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/shims:$PATH"
+PATH=${HOME}/bin:${HOME}/.rbenv/bin:$PATH:${HOME}/.tmux/bin:$PATH
