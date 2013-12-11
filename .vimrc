@@ -247,6 +247,15 @@ set noswapfile
 highlight Title term=bold ctermfg=121 gui=bold guifg=#60ff60
 """
 
+""" quickrun
+if !exists("g:quickrun_config")
+  let g:quickrun_config={}
+endif
+let g:quickrun_config["_"] = {
+  \ "outputter/buffer/split" : ":rightbelow 8sp"
+  \ }
+"""
+
 function! GetCursorSyntaxGroup()
     echo "hi<" .synIDattr(synID(line("."), col("."), 1), "name") . '> trans<'
         \   . synIDattr(synID(line("."), col("."), 0), "name") . '> lo<'
