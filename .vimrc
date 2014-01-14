@@ -64,12 +64,9 @@ NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/neocomplcache-clang'
 
-NeoBundleLazy 'Shougo/unite.vim', {
-            \ 'autoload' : {
-            \   'commands' : ["Unite"
-            \       , "UniteWithBufferDir"
-            \       , "QuickRun"],
-            \ }}
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Shougo/vimfiler.vim'
 " vim-scripts repos
 NeoBundle 'L9'
 NeoBundle 'FuzzyFinder'
@@ -136,6 +133,18 @@ endif
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
 """
 
+""" unite
+let g:unite_winwidth = 40
+nnoremap <C-u> :Unite -vertical file buffer<CR>
+nnoremap <C-u><C-o> :Unite -vertical outline<CR>
+"""
+
+""" vimfiler
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_safe_mode_by_default = 0
+"""
+
+nnoremap ; :
 
 """ neocomplcache
 " 補完ウィンドウの設定
