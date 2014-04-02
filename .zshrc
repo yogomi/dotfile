@@ -85,5 +85,6 @@ autoload run-help
 HELPDIR=/usr/local/share/zsh/helpfiles
 
 eval "$(rbenv init -)"
+export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
 PATH=${HOME}/bin:${HOME}/.rbenv/bin:$PATH:${HOME}/.tmux/bin:$PATH
