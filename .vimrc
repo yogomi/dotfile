@@ -29,10 +29,9 @@ NeoBundle 'Shougo/vimproc', {
     \ },
     \}
 
-"NeoBundleLazy 'Shougo/neocomplete.vim', {
-"    \ 'autoload' : {
-"    \ 'insert' : 1,
-"    \ }}
+function! s:meet_neocomplete_requirements()
+  return has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
+endfunction
 
 " My Bundles here:
 "
@@ -41,6 +40,7 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" NeoBundle 'Rykka/riv.vim'
 
 """ for html and js
 NeoBundle 'mattn/emmet-vim'
@@ -48,6 +48,14 @@ NeoBundle 'othree/html5.vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'hail2u/vim-css3-syntax'
 """
+
+if s:meet_neocomplete_requirements()
+  NeoBundle 'Shougo/neocomplete.vim'
+  NeoBundleFetch 'Shougo/neocomplcache.vim'
+else
+  NeoBundleFetch 'Shougo/neocomplete.vim'
+  NeoBundle 'Shougo/neocomplcache.vim'
+endif
 
 NeoBundle 'yogomi/Flake8-vim', 'preparationForPython2.6'
 let g:PyFlakeOnQrite = 1
@@ -61,8 +69,6 @@ let g:PyFlakeRangeCommand = 'Q'
 NeoBundle 'thinca/vim-quickrun'
 
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'Shougo/neocomplcache.vim'
-NeoBundle 'Shougo/neocomplcache-clang'
 
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
@@ -146,78 +152,109 @@ let g:vimfiler_safe_mode_by_default = 0
 
 nnoremap ; :
 
-""" neocomplcache
-" 補完ウィンドウの設定
-set completeopt=menuone
- 
-" 起動時に有効化
-let g:neocomplcache_enable_at_startup = 1
- 
-" 大文字が入力されるまで大文字小文字の区別を無視する
-let g:neocomplcache_enable_smart_case = 1
- 
-" _(アンダースコア)区切りの補完を有効化
-let g:neocomplcache_enable_underbar_completion = 1
- 
-let g:neocomplcache_enable_camel_case_completion  =  1
- 
-" ポップアップメニューで表示される候補の数
-let g:neocomplcache_max_list = 20
- 
-" シンタックスをキャッシュするときの最小文字長
-let g:neocomplcache_min_syntax_length = 3
- 
-" ディクショナリ定義
-let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : '',
-    \ 'php' : $HOME . '/.vim/dict/php.dict',
-    \ 'ctp' : $HOME . '/.vim/dict/php.dict'
-    \ }
- 
-if !exists('g:neocomplcache_keyword_patterns')
-        let g:neocomplcache_keyword_patterns = {}
-endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
- 
-" スニペットを展開する。スニペットが関係しないところでは行末まで削除
-imap <expr><C-k> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : "\<C-o>D"
-smap <expr><C-k> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : "\<C-o>D"
- 
-" 前回行われた補完をキャンセルします
-inoremap <expr><C-g> neocomplcache#undo_completion()
- 
-" 補完候補のなかから、共通する部分を補完します
-inoremap <expr><C-l> neocomplcache#complete_common_string()
- 
-" 改行で補完ウィンドウを閉じる
-inoremap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
- 
-"tabで補完候補の選択を行う
-inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
- 
-" <C-h>や<BS>を押したときに確実にポップアップを削除します
-inoremap <expr><C-h> neocomplcache#smart_close_popup().”\<C-h>”
- 
-" 現在選択している候補を確定します
-inoremap <expr><C-y> neocomplcache#close_popup()
- 
-" 現在選択している候補をキャンセルし、ポップアップを閉じます
-inoremap <expr><C-e> neocomplcache#cancel_popup()
+if s:meet_neocomplete_requirements()
+  """ neocomplete
+  " 補完ウィンドウの設定
+  set completeopt=menuone
 
-""" neocomplcache_clang
-" snippets expand key
-let g:neocomplcache_clang_use_library = 1
-if has('mac')
-    let g:neocomplcache_clang_library_path = '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
+  " 起動時に有効化
+  let g:neocomplete#enable_at_startup = 1
+
+  " 大文字が入力されるまで大文字小文字の区別を無視する
+  let g:neocomplete#enable_smart_case = 1
+
+  " ポップアップメニューで表示される候補の数
+  let g:neocomplete#max_list = 20
+
+  " シンタックスをキャッシュするときの最小文字長
+  let g:neocomplete#sources#syntax#min_keyward_length = 3
+
+  " ディクショナリ定義
+  let g:neocomplete#sources#dictionary#dictionaries = {
+      \ 'default' : '',
+      \ 'php' : $HOME . '/.vim/dict/php.dict',
+      \ 'ctp' : $HOME . '/.vim/dict/php.dict'
+      \ }
+
+  if !exists('g:neocomplete#keyword_patterns')
+          let g:neocomplete#keyword_patterns = {}
+  endif
+  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+  " 前回行われた補完をキャンセルします
+  inoremap <expr><C-g> neocomplete#undo_completion()
+
+  " 補完候補のなかから、共通する部分を補完します
+  inoremap <expr><C-l> neocomplete#complete_common_string()
+
+  " 改行で補完ウィンドウを閉じる
+  inoremap <expr><CR> neocomplete#smart_close_popup() . "\<CR>"
+
+  "tabで補完候補の選択を行う
+  inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+  " <C-h>や<BS>を押したときに確実にポップアップを削除します
+  inoremap <expr><C-h> neocomplete#smart_close_popup().”\<C-h>”
+
+  " 現在選択している候補を確定します
+  inoremap <expr><C-y> neocomplete#close_popup()
+
+  " 現在選択している候補をキャンセルし、ポップアップを閉じます
+  inoremap <expr><C-e> neocomplete#cancel_popup()
 else
-    let g:neocomplcache_clang_library_path = '/usr/share/clang'
+  """ neocomplcache
+  " 補完ウィンドウの設定
+  set completeopt=menuone
+
+  " 起動時に有効化
+  let g:neocomplcache_enable_at_startup = 1
+
+  " 大文字が入力されるまで大文字小文字の区別を無視する
+  let g:neocomplcache_enable_smart_case = 1
+
+  let g:neocomplcache_enable_camel_case_completion  =  1
+
+  " ポップアップメニューで表示される候補の数
+  let g:neocomplcache_max_list = 20
+
+  " シンタックスをキャッシュするときの最小文字長
+  let g:neocomplcache_min_syntax_length = 3
+
+  " ディクショナリ定義
+  let g:neocomplcache_dictionary_filetype_lists = {
+      \ 'default' : '',
+      \ 'php' : $HOME . '/.vim/dict/php.dict',
+      \ 'ctp' : $HOME . '/.vim/dict/php.dict'
+      \ }
+
+  if !exists('g:neocomplcache_keyword_patterns')
+          let g:neocomplcache_keyword_patterns = {}
+  endif
+  let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+  " 前回行われた補完をキャンセルします
+  inoremap <expr><C-g> neocomplcache#undo_completion()
+
+  " 補完候補のなかから、共通する部分を補完します
+  inoremap <expr><C-l> neocomplcache#complete_common_string()
+
+  " 改行で補完ウィンドウを閉じる
+  inoremap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
+
+  "tabで補完候補の選択を行う
+  inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+  " <C-h>や<BS>を押したときに確実にポップアップを削除します
+  inoremap <expr><C-h> neocomplcache#smart_close_popup().”\<C-h>”
+
+  " 現在選択している候補を確定します
+  inoremap <expr><C-y> neocomplcache#close_popup()
+
+  " 現在選択している候補をキャンセルし、ポップアップを閉じます
+  inoremap <expr><C-e> neocomplcache#cancel_popup()
 endif
-let g:neocomplcache_clang_user_options = 
-    \ '-I /usr/includ ' .
-    \ '-I /usr/include/AL ' .
-    \ '-fms-extensions -gnu-runtime ' .
-    \ '-include malloc.h '
 
 set t_Co=256
 set fileformats=unix,dos
