@@ -57,6 +57,7 @@ alias g=git
 alias v=vim
 case "${OSTYPE}" in
 darwin*)
+    alias lsusb='system_profiler SPUSBDataType'
     alias ls='ls -G'
     ;;
 linux*)
