@@ -101,6 +101,16 @@ set pastetoggle=<F10>
 nnoremap <Space>. :<C-u>edit $MYVIMRC<Enter>
 nnoremap <Space>s. :<C-u>source $MYVIMRC<Enter>
 
+" disable arrow keys
+map <Up> <nop>
+map <Down> <nop>
+map <Left> <nop>
+map <Right> <nop>
+imap <Up> <nop>
+imap <Down> <nop>
+imap <Left> <nop>
+imap <Right> <nop>
+
 " ---- insert mode ---- {{{
 "emacs like key-bind in insert mode
 inoremap <C-a> <Home>
