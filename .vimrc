@@ -129,6 +129,9 @@ cnoremap <C-b> <Left>
 cnoremap <C-h> <Backspace>
 cnoremap <C-d> <Del>
 
+"" ement key-bind
+nmap ,, <C-Y>,
+
 """ view
 syntax on
 
