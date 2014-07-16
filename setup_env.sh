@@ -23,4 +23,4 @@ git clone ${NEOBUNDLE_GIT_URL} ${NEOBUNDLE_DIST_DIR}
 ln -sf ${PWD}/.vim ${HOME}/.vim
 
 mkdir -p ${HOME}/bin
-cp -a ${PWD}/bin/* ${HOME}/bin/
+ln -sf ${PWD}/bin/* ${HOME}/bin
