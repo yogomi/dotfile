@@ -53,6 +53,34 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 ### Prompt ###
 autoload -U colors; colors
 
+
+alias g=git
+alias v=vim
+case "${OSTYPE}" in
+darwin*)
+    alias lsusb='system_profiler SPUSBDataType'
+    alias ls='ls -G'
+    ;;
+linux*)
+    alias ls='ls --color=auto'
+    ;;
+esac
+
+# google search<<<
+function google() {
+  local str opt
+  if [ $# != 0 ]; then
+    for i in $*; do
+      str="$str+$i"
+    done
+    str=`echo $str | sed 's/^\+//'`
+    opt='search?num=50&hl=ja&lr=lang_ja'
+    opt="${opt}&q=${str}"
+  fi
+  w3m http://www.google.co.jp/$opt
+}
+#>>>
+
 source ${HOME}/.zsh/modules/zsh-context-sensitive-alias/csa.zsh
 csa_init
 
@@ -84,34 +112,9 @@ function my_context_func {
 typeset -ga chpwd_functions
 chpwd_functions+=my_context_func
 
-alias g=git
+
 # csalias <context> <alias> <command>
 csalias git sm 'git submodule'
-alias v=vim
-case "${OSTYPE}" in
-darwin*)
-    alias lsusb='system_profiler SPUSBDataType'
-    alias ls='ls -G'
-    ;;
-linux*)
-    alias ls='ls --color=auto'
-    ;;
-esac
-
-# google search<<<
-function google() {
-  local str opt
-  if [ $# != 0 ]; then
-    for i in $*; do
-      str="$str+$i"
-    done
-    str=`echo $str | sed 's/^\+//'`
-    opt='search?num=50&hl=ja&lr=lang_ja'
-    opt="${opt}&q=${str}"
-  fi
-  w3m http://www.google.co.jp/$opt
-}
-#>>>
 
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 unalias run-help
