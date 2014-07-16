@@ -339,3 +339,5 @@ function! GetCursorSyntaxGroup()
 endfunction
 
 map <Leader>s :call GetCursorSyntaxGroup()<CR>
+
+source ${HOME}/.vim/binary.vim
