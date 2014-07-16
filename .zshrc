@@ -53,7 +53,40 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 ### Prompt ###
 autoload -U colors; colors
 
+source ${HOME}/.zsh/modules/zsh-context-sensitive-alias/csa.zsh
+csa_init
+
+# コンテキストを更新する関数
+function my_context_func {
+	local -a ctx
+	# Git リポジトリの中にいるなら git コンテキストを追加
+	if [[ -n `git rev-parse --git-dir 2> /dev/null` ]]; then
+		ctx+=git
+	fi
+	# Mercurial リポジトリの中にいるなら hg コンテキストを追加
+	if [[ -n `hg root 2> /dev/null` ]]; then
+		ctx+=hg
+	fi
+	if [[ -e Rakefile ]]; then
+		ctx+=rake
+	fi
+	if [[ -e Gemfile ]]; then
+		ctx+=bundler
+	fi
+
+	# コンテキストをセット
+	# 同名のエイリアスが複数のコンテキストで定義されている場合、
+	# 配列変数 ctx 内の*より後ろ*にあるコンテキストのエイリアスが優先される
+	csa_set_context $ctx
+}
+
+# コンテキストを更新する関数が cd のたびに呼ばれるようにする
+typeset -ga chpwd_functions
+chpwd_functions+=my_context_func
+
 alias g=git
+# csalias <context> <alias> <command>
+csalias git sm 'git submodule'
 alias v=vim
 case "${OSTYPE}" in
 darwin*)
