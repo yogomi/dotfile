@@ -332,6 +332,21 @@ let g:quickrun_config["_"] = {
   \ }
 """
 
+""" cache
+set backupdir=~/.vimcache/bak
+set viminfo& viminfo+=n~/.vimcache/viminfo
+if v:version >= 703
+    set undodir=~/.vimcache/undo
+    set undofile
+
+  " for snippet_complete marker
+  " conceal in insert (i), normal (n) and visual (v) modes
+  set conceallevel=2 concealcursor=inv
+  set colorcolumn=79
+endif
+
+"""
+
 function! GetCursorSyntaxGroup()
     echo "hi<" .synIDattr(synID(line("."), col("."), 1), "name") . '> trans<'
         \   . synIDattr(synID(line("."), col("."), 0), "name") . '> lo<'
