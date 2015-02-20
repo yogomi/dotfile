@@ -24,11 +24,40 @@ setopt auto_menu
 setopt list_packed
 setopt list_types
 
+typeset -ga chpwd_functions
+
 DIRSTACKSIZE=100
 setopt AUTO_PUSHD
 zstyle ':completion:*' menu select
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
+
+#補完候補がないときは、より曖昧検索パワーを高める
+### r:|[._-]=*: 「.」「_」「-」の前にワイルドカード「*」があるものとして補完する。
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}  r:|[._-]=*'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' use-cache true
+
+# 詳細な情報を使う。
+zstyle ':completion:*' verbose yes
+# 補完リストをグループ分けする
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:default' menu select=2
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+## via cdd formaat
+zstyle ':completion:*:descriptions' format '%BCompleting%b %F{yellow}%U%d%u'
+zstyle ':completion:*' list-separator '-->'
+# ../ などとタイプしたとき、現在いるディレクトリを補完候補に出さない
+zstyle ':completion:*' ignore-parents parent pwd ..
+
+autoload -Uz is-at-least
+if is-at-least 4.3.11; then
+  autoload -U chpwd_recent_dirs cdr
+  chpwd_functions+=chpwd_recent_dirs
+  zstyle ":chpwd:*" recent-dirs-max 500
+  zstyle ":chpwd:*" recent-dirs-default true
+  zstyle ":completion:*" recent-dirs-insert always
+fi
 
 ### History ###
 HISTFILE=~/.zsh_history
@@ -39,6 +68,17 @@ setopt extended_history
 setopt hist_ignore_dups
 setopt share_history
 setopt hist_reduce_blanks
+
+# enable cdr {{{
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+zstyle ':completion:*:*:cdr:*:*' menu selection
+zstyle ':completion:*' recent-dirs-insert both
+zstyle ':chpwd:*' recent-dirs-max 500
+zstyle ':chpwd:*' recent-dirs-default true
+zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-$HOME/.cache}/shell/chpwd-recent-dirs"
+zstyle ':chpwd:*' recent-dirs-pushd true
+# }}}
 
 ### Ls Color ###
 export LSCOLORS=gxfxcxdxbxegedabagacad
@@ -81,6 +121,19 @@ function google() {
 }
 #>>>
 
+if which peco > /dev/null; then
+    echo 'use peco'
+    source ~/.zsh/.zrc.peco.zsh
+    function _insert_pecopipe() {
+        LBUFFER=${LBUFFER}" | peco"
+    }
+    zle -N _insert_pecopipe
+    bindkey '^[^[' _insert_pecopipe
+else
+    echo 'no peco'
+fi
+
+
 source ${HOME}/.zsh/modules/zsh-context-sensitive-alias/csa.zsh
 csa_init
 
@@ -109,9 +162,7 @@ function my_context_func {
 }
 
 # コンテキストを更新する関数が cd のたびに呼ばれるようにする
-typeset -ga chpwd_functions
 chpwd_functions+=my_context_func
-
 
 # csalias <context> <alias> <command>
 csalias git sm 'git submodule'

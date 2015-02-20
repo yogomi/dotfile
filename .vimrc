@@ -84,22 +84,22 @@ NeoBundle 'git://git.wincent.com/command-t.git'
 NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 NeoBundle 'funorpain/vim-cpplint'
 
-NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
-\   'autoload' : {
-\     'filetypes' : ['python'],
-\   },
-\ }
-let g:enable_python_hl_lvar = 1
+" NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
+" \   'autoload' : {
+" \     'filetypes' : ['python'],
+" \   },
+" \ }
+" let g:enable_python_hl_lvar = 1
 " default is 'guifg=palegreen3 gui=NONE ctermfg=114 cterm=NONE'
-let g:python_hl_lvar_highlight_color = 'guifg=palegreen3 gui=NONE ctermfg=186 cterm=NONE'
+" let g:python_hl_lvar_highlight_color = 'guifg=palegreen3 gui=NONE ctermfg=186 cterm=NONE'
 
-autocmd BufWinEnter  *.py PyHlLVar
-autocmd BufWinLeave  *.py PyHlLVar
-autocmd WinEnter     *.py PyHlLVar
-autocmd BufWritePost *.py PyHlLVar
-autocmd WinLeave     *.py PyHlLVar
-autocmd TabEnter     *.py PyHlLVar
-autocmd TabLeave     *.py PyHlLVar
+" autocmd BufWinEnter  *.py PyHlLVar
+" autocmd BufWinLeave  *.py PyHlLVar
+" autocmd WinEnter     *.py PyHlLVar
+" autocmd BufWritePost *.py PyHlLVar
+" autocmd WinLeave     *.py PyHlLVar
+" autocmd TabEnter     *.py PyHlLVar
+" autocmd TabLeave     *.py PyHlLVar
 
 " ...
 
