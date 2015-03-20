@@ -32,9 +32,6 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 
-#補完候補がないときは、より曖昧検索パワーを高める
-### r:|[._-]=*: 「.」「_」「-」の前にワイルドカード「*」があるものとして補完する。
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}  r:|[._-]=*'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' use-cache true
 
@@ -105,21 +102,6 @@ linux*)
     alias ls='ls --color=auto'
     ;;
 esac
-
-# google search<<<
-function google() {
-  local str opt
-  if [ $# != 0 ]; then
-    for i in $*; do
-      str="$str+$i"
-    done
-    str=`echo $str | sed 's/^\+//'`
-    opt='search?num=50&hl=ja&lr=lang_ja'
-    opt="${opt}&q=${str}"
-  fi
-  w3m http://www.google.co.jp/$opt
-}
-#>>>
 
 if which peco > /dev/null; then
     echo 'use peco'
