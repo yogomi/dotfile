@@ -26,12 +26,30 @@ setopt list_types
 
 typeset -ga chpwd_functions
 
+# 補完方法の設定 指定した順番に実行
+### _oldlist 前回の補完結果を再利用する。
+### _complete: fpath補完
+### _expand: globや変数の展開を行う
+### _match: globを展開しないで候補の一覧から補完する。
+### _history: ヒストリのコマンドも補完候補とする。
+### _ignored: 補完候補にださないと指定したものも補完候補とする。
+### _approximate: 似ている補完候補も補完候補とする。
+### _prefix: カーソル以降を無視してカーソル位置までで補完する。
+zstyle ':completion:*' completer \
+    _oldlist _complete _expand _match _history _ignored _approximate _prefix
+
+## sudo時にはsudo用のパスも使う。
+zstyle ':completion:sudo:*' environ PATH="$SUDO_PATH:$PATH"
+
 DIRSTACKSIZE=100
 setopt AUTO_PUSHD
 zstyle ':completion:*' menu select
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 
+#補完候補がないときは、より曖昧検索パワーを高める
+### r:|[._-]=*: 「.」「_」「-」の前にワイルドカード「*」があるものとして補完する。
+##zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}  r:|[._-]=*'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' use-cache true
 
