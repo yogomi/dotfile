@@ -13,7 +13,7 @@ augroup END
 
 let ostype = system('uname')
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.vim/bundle/'))
 
 set clipboard+=unnamed
 
@@ -113,6 +113,7 @@ NeoBundle 'funorpain/vim-cpplint'
 
 " Installation check.
 NeoBundleCheck
+call neobundle#end()
 
 set pastetoggle=<F10>
 
