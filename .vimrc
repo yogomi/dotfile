@@ -15,6 +15,8 @@ let ostype = system('uname')
 
 call neobundle#rc(expand('~/.vim/bundle/'))
 
+set clipboard+=unnamed
+
  " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
