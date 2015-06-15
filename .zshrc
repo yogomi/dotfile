@@ -1,5 +1,8 @@
 # Created by newuser for 4.3.17
 
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.rbenv/shims:$PATH"
+PATH=${HOME}/bin:${HOME}/.rbenv/bin:/usr/local/Qt-5.3.1/bin:$PATH:${HOME}/.tmux/bin:$PATH
 
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
@@ -171,9 +174,5 @@ export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 unalias run-help
 autoload run-help
 HELPDIR=/usr/local/share/zsh/helpfiles
-
-export PATH="/usr/local/bin:$PATH"
-export PATH="$HOME/.rbenv/shims:$PATH"
-PATH=${HOME}/bin:${HOME}/.rbenv/bin:/usr/local/Qt-5.3.1/bin:$PATH:${HOME}/.tmux/bin:$PATH
 
 eval "$(rbenv init -)"
