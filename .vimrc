@@ -84,7 +84,7 @@ NeoBundle 'git://git.wincent.com/command-t.git'
 " Non git repos
 " NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
-NeoBundle 'funorpain/vim-cpplint'
+NeoBundle 'yogomi/vim-cpplint'
 
 " NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
 " \   'autoload' : {
@@ -170,6 +170,7 @@ endif
 
 """ cpplint
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
+let g:cpplint_cmd_options="--filter=-readability/streams"
 """
 
 """ unite
