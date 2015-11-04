@@ -337,6 +337,7 @@ let g:quickrun_config["_"] = {
 """
 
 """ cache
+nnoremap x "_x
 set backupdir=~/.vimcache/bak
 set viminfo& viminfo+=n~/.vimcache/viminfo
 if v:version >= 703
