@@ -170,7 +170,7 @@ endif
 
 """ cpplint
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
-let g:cpplint_cmd_options="--filter=-readability/streams"
+let g:cpplint_cmd_options="--filter=-readability/streams,-build/c++11"
 """
 
 """ unite
