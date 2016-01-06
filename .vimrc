@@ -31,10 +31,6 @@ NeoBundle 'Shougo/vimproc', {
     \ },
     \}
 
-function! s:meet_neocomplete_requirements()
-  return has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
-endfunction
-
 " My Bundles here:
 "
 " Note: You don't set neobundle setting in .gvimrc!
@@ -51,13 +47,25 @@ NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'hail2u/vim-css3-syntax'
 """
 
-if s:meet_neocomplete_requirements()
-  NeoBundle 'Shougo/neocomplete.vim'
-  NeoBundleFetch 'Shougo/neocomplcache.vim'
-else
-  NeoBundleFetch 'Shougo/neocomplete.vim'
-  NeoBundle 'Shougo/neocomplcache.vim'
-endif
+NeoBundleLazy 'Shougo/neocomplete.vim', {
+\   'autoload' : {
+\     'insert' : 1,
+\ },
+\   'depends' : 'Shougo/context_filetype.vim',
+\   'disabled' : !(has('lua') || has('luajit')),
+\   'vim_version' : '7.3.885'
+\ }
+NeoBundleLazy 'Shougo/neosnippet', {
+\ 'autoload' : {
+\   'mappings' : ['<Plug>(neosnippet_'],
+\   'commands' : ['NeoSnippetClearMarkers', ],
+\   'function_prefix' : 'neosnippet',
+\ }}
+NeoBundleLazy 'Shougo/neosnippet-snippets', {
+\ 'autoload' : {
+\   'insert' : 1,
+\ },
+\ }
 
 NeoBundle 'yogomi/Flake8-vim', 'preparationForPython2.6'
 let g:PyFlakeOnQrite = 1
@@ -71,6 +79,10 @@ let g:PyFlakeRangeCommand = 'Q'
 NeoBundle 'thinca/vim-quickrun'
 
 NeoBundle 'altercation/vim-colors-solarized'
+
+NeoBundleLazy 'fatih/vim-go', {
+  \   'autoload': {'filetypes': ['go']},
+  \ }
 
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
@@ -170,7 +182,7 @@ endif
 
 """ cpplint
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
-let g:cpplint_cmd_options="--filter=-readability/streams,-build/c++11"
+let g:cpplint_cmd_options="--filter=-readability/streams,-build/c++11,-runtime/references"
 """
 
 """ unite
@@ -186,109 +198,55 @@ let g:vimfiler_safe_mode_by_default = 0
 
 nnoremap ; :
 
-if s:meet_neocomplete_requirements()
-  """ neocomplete
-  " 補完ウィンドウの設定
-  set completeopt=menuone
+""" neocomplete
+" 補完ウィンドウの設定
+set completeopt=menuone
 
-  " 起動時に有効化
-  let g:neocomplete#enable_at_startup = 1
+" 起動時に有効化
+let g:neocomplete#enable_at_startup = 1
 
-  " 大文字が入力されるまで大文字小文字の区別を無視する
-  let g:neocomplete#enable_smart_case = 1
+" 大文字が入力されるまで大文字小文字の区別を無視する
+let g:neocomplete#enable_smart_case = 1
 
-  " ポップアップメニューで表示される候補の数
-  let g:neocomplete#max_list = 20
+" ポップアップメニューで表示される候補の数
+let g:neocomplete#max_list = 20
 
-  " シンタックスをキャッシュするときの最小文字長
-  let g:neocomplete#sources#syntax#min_keyward_length = 3
+" シンタックスをキャッシュするときの最小文字長
+let g:neocomplete#sources#syntax#min_keyward_length = 3
 
-  " ディクショナリ定義
-  let g:neocomplete#sources#dictionary#dictionaries = {
-      \ 'default' : '',
-      \ 'php' : $HOME . '/.vim/dict/php.dict',
-      \ 'ctp' : $HOME . '/.vim/dict/php.dict'
-      \ }
+" ディクショナリ定義
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'php' : $HOME . '/.vim/dict/php.dict',
+    \ 'ctp' : $HOME . '/.vim/dict/php.dict'
+    \ }
 
-  if !exists('g:neocomplete#keyword_patterns')
-          let g:neocomplete#keyword_patterns = {}
-  endif
-  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-  " 前回行われた補完をキャンセルします
-  inoremap <expr><C-g> neocomplete#undo_completion()
-
-  " 補完候補のなかから、共通する部分を補完します
-  inoremap <expr><C-l> neocomplete#complete_common_string()
-
-  " 改行で補完ウィンドウを閉じる
-  inoremap <expr><CR> neocomplete#smart_close_popup() . "\<CR>"
-
-  "tabで補完候補の選択を行う
-  inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-  " <C-h>や<BS>を押したときに確実にポップアップを削除します
-  inoremap <expr><C-h> neocomplete#smart_close_popup().”\<C-h>”
-
-  " 現在選択している候補を確定します
-  inoremap <expr><C-y> neocomplete#close_popup()
-
-  " 現在選択している候補をキャンセルし、ポップアップを閉じます
-  inoremap <expr><C-e> neocomplete#cancel_popup()
-else
-  """ neocomplcache
-  " 補完ウィンドウの設定
-  set completeopt=menuone
-
-  " 起動時に有効化
-  let g:neocomplcache_enable_at_startup = 1
-
-  " 大文字が入力されるまで大文字小文字の区別を無視する
-  let g:neocomplcache_enable_smart_case = 1
-
-  let g:neocomplcache_enable_camel_case_completion  =  1
-
-  " ポップアップメニューで表示される候補の数
-  let g:neocomplcache_max_list = 20
-
-  " シンタックスをキャッシュするときの最小文字長
-  let g:neocomplcache_min_syntax_length = 3
-
-  " ディクショナリ定義
-  let g:neocomplcache_dictionary_filetype_lists = {
-      \ 'default' : '',
-      \ 'php' : $HOME . '/.vim/dict/php.dict',
-      \ 'ctp' : $HOME . '/.vim/dict/php.dict'
-      \ }
-
-  if !exists('g:neocomplcache_keyword_patterns')
-          let g:neocomplcache_keyword_patterns = {}
-  endif
-  let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-  " 前回行われた補完をキャンセルします
-  inoremap <expr><C-g> neocomplcache#undo_completion()
-
-  " 補完候補のなかから、共通する部分を補完します
-  inoremap <expr><C-l> neocomplcache#complete_common_string()
-
-  " 改行で補完ウィンドウを閉じる
-  inoremap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
-
-  "tabで補完候補の選択を行う
-  inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-  " <C-h>や<BS>を押したときに確実にポップアップを削除します
-  inoremap <expr><C-h> neocomplcache#smart_close_popup().”\<C-h>”
-
-  " 現在選択している候補を確定します
-  inoremap <expr><C-y> neocomplcache#close_popup()
-
-  " 現在選択している候補をキャンセルし、ポップアップを閉じます
-  inoremap <expr><C-e> neocomplcache#cancel_popup()
+if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
 endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" 前回行われた補完をキャンセルします
+inoremap <expr><C-g> neocomplete#undo_completion()
+
+" 補完候補のなかから、共通する部分を補完します
+inoremap <expr><C-l> neocomplete#complete_common_string()
+
+" 改行で補完ウィンドウを閉じる
+inoremap <expr><CR> neocomplete#smart_close_popup() . "\<CR>"
+
+"tabで補完候補の選択を行う
+inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+" <C-h>や<BS>を押したときに確実にポップアップを削除します
+inoremap <expr><C-h> neocomplete#smart_close_popup().”\<C-h>”
+
+" 現在選択している候補を確定します
+inoremap <expr><C-y> neocomplete#close_popup()
+
+" 現在選択している候補をキャンセルし、ポップアップを閉じます
+inoremap <expr><C-e> neocomplete#cancel_popup()
 
 set t_Co=256
 set fileformats=unix,dos
