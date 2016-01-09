@@ -89,13 +89,11 @@ NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/vimfiler.vim'
 " vim-scripts repos
 NeoBundle 'L9'
-NeoBundle 'FuzzyFinder'
 NeoBundle 'rails.vim'
 " Non github repos
 NeoBundle 'vim-scripts/command-t'
 " Non git repos
 " NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 NeoBundle 'yogomi/vim-cpplint'
 
 " NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
