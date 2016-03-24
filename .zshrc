@@ -177,3 +177,10 @@ autoload run-help
 HELPDIR=/usr/local/share/zsh/helpfiles
 
 eval "$(rbenv init -)"
+case ${OSTYPE} in
+  darwin*)
+    source ~/.zsh/.darwin/*
+    ;;
+  linux*)
+    ;;
+esac
