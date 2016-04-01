@@ -184,3 +184,6 @@ case ${OSTYPE} in
   linux*)
     ;;
 esac
+
+# node.js
+source ~/.zsh/.zrc.node.js.zsh
