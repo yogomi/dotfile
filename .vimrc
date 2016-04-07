@@ -96,6 +96,7 @@ NeoBundle 'vim-scripts/command-t'
 " NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 NeoBundle 'yogomi/vim-cpplint'
 
+NeoBundle 'myhere/vim-nodejs-complete'
 " NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
 " \   'autoload' : {
 " \     'filetypes' : ['python'],
@@ -182,6 +183,16 @@ endif
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
 let g:cpplint_cmd_options="--filter=-readability/streams,-build/c++11,-runtime/references"
 """
+
+""" JavaScript
+autocmd FileType javascript setlocal omnifunc=nodejscomplete#CompleteJS
+if !exists('g:neocomplcache_omni_functions')
+  let g:neocomplcache_omni_functions = {}
+endif
+let g:neocomplcache_omni_functions.javascript = 'nodejscomplete#CompleteJS'
+
+let g:node_usejscomplete = 1
+""" JavaScript end
 
 """ unite
 let g:unite_winwidth = 40
