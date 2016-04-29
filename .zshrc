@@ -124,6 +124,8 @@ linux*)
     ;;
 esac
 
+alias ll='ls -alh'
+
 if which peco > /dev/null; then
     echo 'use peco'
     source ~/.zsh/.zrc.peco.zsh
