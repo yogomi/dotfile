@@ -114,6 +114,7 @@ autoload -U colors; colors
 
 alias g=git
 alias v=vim
+alias sl=ls
 case "${OSTYPE}" in
 darwin*)
     alias lsusb='system_profiler SPUSBDataType'
