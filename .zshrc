@@ -173,7 +173,7 @@ chpwd_functions+=my_context_func
 # csalias <context> <alias> <command>
 csalias git sm 'git submodule'
 
-export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH:/sbin:/usr/sbin"
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 unalias run-help
 autoload run-help
