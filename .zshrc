@@ -86,6 +86,7 @@ setopt extended_history
 setopt hist_ignore_dups
 setopt share_history
 setopt hist_reduce_blanks
+setopt hist_save_no_dups
 
 # enable cdr {{{
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
