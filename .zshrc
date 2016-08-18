@@ -197,5 +197,9 @@ case ${OSTYPE} in
     ;;
 esac
 
+#docker
+alias goat="docker --tlsverify --tlscacert=${HOME}/.docker/certs-for-goat/ca.pem --tlscert=${HOME}/.docker/certs-for-goat/cert.pem --tlskey=${HOME}/.docker/certs-for-goat/key.pem -H=red-goat.japaneast.cloudapp.azure.com:2376"
+
+
 # node.js
 source ~/.zsh/.zrc.node.js.zsh
