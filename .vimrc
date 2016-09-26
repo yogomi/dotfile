@@ -96,6 +96,8 @@ NeoBundle 'vim-scripts/command-t'
 " NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 NeoBundle 'yogomi/vim-cpplint'
 
+NeoBundle "tyru/caw.vim.git"
+
 NeoBundle 'myhere/vim-nodejs-complete'
 " NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
 " \   'autoload' : {
@@ -317,6 +319,11 @@ if v:version >= 703
   set colorcolumn=79
 endif
 
+"""
+
+""" comment out
+nmap <C-K> <Plug>(caw:i:toggle)
+vmap <C-K> <Plug>(caw:i:toggle)
 """
 
 function! GetCursorSyntaxGroup()
