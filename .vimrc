@@ -124,6 +124,10 @@ NeoBundle 'myhere/vim-nodejs-complete'
 " :NeoBundleInstall(!)    - install(update) bundles
 " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
+" file encoding
+set fileencodings=utf-8,sjis,euc-jp
+
+
 " Installation check.
 NeoBundleCheck
 call neobundle#end()
