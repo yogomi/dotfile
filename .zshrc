@@ -203,3 +203,9 @@ alias goat="docker --tlsverify --tlscacert=${HOME}/.docker/certs-for-goat/ca.pem
 
 # node.js
 source ~/.zsh/.zrc.node.js.zsh
+export PATH="/usr/local/sbin:$PATH"
+
+# go
+export GOPATH=$HOME/.gopath
+export GOROOT=$( go env GOROOT )
+export PATH=$GOPATH/bin:$PATH

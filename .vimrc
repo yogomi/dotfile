@@ -326,8 +326,8 @@ endif
 """
 
 """ comment out
-nmap <C-K> <Plug>(caw:i:toggle)
-vmap <C-K> <Plug>(caw:i:toggle)
+nmap <C-Z> <Plug>(caw:i:toggle)
+vmap <C-Z> <Plug>(caw:i:toggle)
 """
 
 function! GetCursorSyntaxGroup()
