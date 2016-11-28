@@ -125,7 +125,9 @@ NeoBundle 'myhere/vim-nodejs-complete'
 " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
 " file encoding
+set encoding=utf-8
 set fileencodings=utf-8,sjis,euc-jp
+set fileformats=unix,dos,mac
 
 
 " Installation check.
