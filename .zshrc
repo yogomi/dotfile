@@ -168,13 +168,13 @@ function my_context_func {
 	csa_set_context $ctx
 }
 
-function git_root() {
+function groot() {
   if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
     cd `git rev-parse --show-toplevel`
   fi
 }
 
-alias prt="git_root"
+alias prt="groot"
 
 # コンテキストを更新する関数が cd のたびに呼ばれるようにする
 chpwd_functions+=my_context_func
