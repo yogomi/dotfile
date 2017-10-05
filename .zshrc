@@ -209,3 +209,11 @@ export PATH="/usr/local/sbin:$PATH"
 export GOPATH=$HOME/.gopath
 export GOROOT=$( go env GOROOT )
 export PATH=$GOPATH/bin:$PATH
+
+# android sdk
+export PATH=${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}
+
+
+
+source /usr/local/bin/virtualenvwrapper.sh
+export WORKON_HOME=~/.virtualenvs

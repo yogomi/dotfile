@@ -53,7 +53,7 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
 \ },
 \   'depends' : 'Shougo/context_filetype.vim',
 \   'disabled' : !(has('lua') || has('luajit')),
-\   'vim_version' : '7.3.885'
+\   'vim_version' : '8.0.69'
 \ }
 NeoBundleLazy 'Shougo/neosnippet', {
 \ 'autoload' : {
@@ -99,6 +99,11 @@ NeoBundle 'yogomi/vim-cpplint'
 NeoBundle "tyru/caw.vim.git"
 
 NeoBundle 'myhere/vim-nodejs-complete'
+
+NeoBundle 'embear/vim-localvimrc'
+
+let g:localvimrc_persistent = 1
+
 " NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
 " \   'autoload' : {
 " \     'filetypes' : ['python'],
@@ -189,7 +194,7 @@ endif
 
 """ cpplint
 autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
-let g:cpplint_cmd_options="--filter=-readability/streams,-build/c++11,-runtime/references"
+let g:cpplint_cmd_options="--linelength=100 --filter=-readability/streams,-build/c++11"
 """
 
 """ JavaScript
