@@ -41,10 +41,18 @@ NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 " NeoBundle 'Rykka/riv.vim'
 
 """ for html and js
+NeoBundle 'scrooloose/syntastic'
+
 NeoBundle 'mattn/emmet-vim'
-NeoBundle 'othree/html5.vim'
-NeoBundle 'pangloss/vim-javascript'
+let g:user_emmet_settings = {
+      \  'javascript.jsx' : {
+      \      'extends': 'jsx',
+      \      'quote_char': "'",
+      \  },
+      \}
+
 NeoBundle 'hail2u/vim-css3-syntax'
+NeoBundle 'pmsorhaindo/syntastic-local-eslint.vim'
 """
 
 NeoBundleLazy 'Shougo/neocomplete.vim', {
@@ -80,10 +88,6 @@ NeoBundle 'thinca/vim-quickrun'
 
 NeoBundle 'altercation/vim-colors-solarized'
 
-NeoBundleLazy 'fatih/vim-go', {
-  \   'autoload': {'filetypes': ['go']},
-  \ }
-
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/vimfiler.vim'
@@ -103,6 +107,8 @@ NeoBundle 'myhere/vim-nodejs-complete'
 NeoBundle 'embear/vim-localvimrc'
 
 let g:localvimrc_persistent = 1
+
+runtime! include/*.vim
 
 " NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
 " \   'autoload' : {

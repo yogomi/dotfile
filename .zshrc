@@ -183,7 +183,6 @@ chpwd_functions+=my_context_func
 csalias git sm 'git submodule'
 
 export PATH="$HOME/.rbenv/bin:$PATH:/sbin:/usr/sbin"
-export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 unalias run-help
 autoload run-help
 HELPDIR=/usr/local/share/zsh/helpfiles
@@ -203,7 +202,7 @@ alias goat="docker --tlsverify --tlscacert=${HOME}/.docker/certs-for-goat/ca.pem
 
 # node.js
 source ~/.zsh/.zrc.node.js.zsh
-export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/sbin:./node_modules/.bin:$PATH"
 
 # go
 export GOPATH=$HOME/.gopath
