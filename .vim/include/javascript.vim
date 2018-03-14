@@ -25,5 +25,5 @@ autocmd MyVimrc FileType javascript,javascript.jsx call EnableJavascript()
 
 NeoBundle 'othree/html5.vim'
 
-NeoBundle 'maxmellon/vim-jsx-pretty', { 'for': ['javascript', 'javascript.jsx'] }
+NeoBundle 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
 NeoBundle 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'], 'do': 'npm install' }
