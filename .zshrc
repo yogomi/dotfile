@@ -176,6 +176,14 @@ function groot() {
 
 alias prt="groot"
 
+function vixit() {
+  if [ -n "${VIM}" ]; then
+    exit
+  else
+    echo 'Not shell in vim'
+  fi
+}
+
 # コンテキストを更新する関数が cd のたびに呼ばれるようにする
 chpwd_functions+=my_context_func
 

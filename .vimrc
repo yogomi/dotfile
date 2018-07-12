@@ -254,6 +254,7 @@ if !exists('g:neocomplete#keyword_patterns')
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
+
 " 前回行われた補完をキャンセルします
 inoremap <expr><C-g> neocomplete#undo_completion()
 
