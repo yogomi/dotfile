@@ -309,6 +309,7 @@ set showtabline=2
 set laststatus=2
 set ambiwidth=double
 set noswapfile
+set nofoldenable
 
 """ highlight
 highlight Title term=bold ctermfg=121 gui=bold guifg=#60ff60

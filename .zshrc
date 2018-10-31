@@ -220,7 +220,8 @@ export PATH=$GOPATH/bin:$PATH
 # android sdk
 export PATH=${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}
 
-
+# google cloud
+export PATH=${HOME}/workspace/sdk/google-cloud-sdk/bin:${PATH}
 
 source /usr/local/bin/virtualenvwrapper.sh
 export WORKON_HOME=~/.virtualenvs
