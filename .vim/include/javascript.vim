@@ -1,7 +1,5 @@
 au BufRead,BufNewFile *.jsx set filetype=javascript.jsx
 
-NeoBundle 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
-
 NeoBundle 'othree/yajs.vim', { 'for': ['javascript', 'javascript.jsx'] }
 NeoBundle 'othree/es.next.syntax.vim', { 'for': ['javascript', 'javascript.jsx'] }
 NeoBundle 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'javascript.jsx'] }

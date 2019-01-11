@@ -6,6 +6,7 @@ PATH=${HOME}/bin:${HOME}/.rbenv/bin:/usr/local/Qt-5.3.1/bin:$PATH:${HOME}/.tmux/
 
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
+export LC_ALL=ja_JP.UTF-8
 export AUTOFEATURE=true
 
 bindkey -e
@@ -219,9 +220,13 @@ export PATH=$GOPATH/bin:$PATH
 
 # android sdk
 export PATH=${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}
+export ANDROID_HOME=${HOME}/Library/Android/sdk
+export ANDROID_NDK_HOME=${HOME}/workspace/sdk/android-ndk-r16b
 
 # google cloud
 export PATH=${HOME}/workspace/sdk/google-cloud-sdk/bin:${PATH}
 
 source /usr/local/bin/virtualenvwrapper.sh
 export WORKON_HOME=~/.virtualenvs
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
