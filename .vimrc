@@ -41,8 +41,6 @@ NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 " NeoBundle 'Rykka/riv.vim'
 
 """ for html and js
-NeoBundle 'scrooloose/syntastic'
-
 NeoBundle 'mattn/emmet-vim'
 let g:user_emmet_settings = {
       \  'javascript.jsx' : {
@@ -52,7 +50,7 @@ let g:user_emmet_settings = {
       \}
 
 NeoBundle 'hail2u/vim-css3-syntax'
-NeoBundle 'pmsorhaindo/syntastic-local-eslint.vim'
+NeoBundle 'scrooloose/syntastic.git'
 """
 
 NeoBundleLazy 'Shougo/neocomplete.vim', {

@@ -226,6 +226,9 @@ export ANDROID_NDK_HOME=${HOME}/workspace/sdk/android-ndk-r16b
 # google cloud
 export PATH=${HOME}/workspace/sdk/google-cloud-sdk/bin:${PATH}
 
+# flutter
+export PATH=${HOME}/workspace/sdk/flutter/bin:${PATH}
+
 source /usr/local/bin/virtualenvwrapper.sh
 export WORKON_HOME=~/.virtualenvs
 
