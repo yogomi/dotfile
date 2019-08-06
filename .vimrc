@@ -50,7 +50,14 @@ let g:user_emmet_settings = {
       \}
 
 NeoBundle 'hail2u/vim-css3-syntax'
+
+""" syntastic lint系のため
 NeoBundle 'scrooloose/syntastic.git'
+
+highlight link SyntasticErrorSign SignColumn
+highlight link SyntasticWarningSign SignColumn
+highlight link SyntasticStyleErrorSign SignColumn
+highlight link SyntasticStyleWarningSign SignColumn
 """
 
 NeoBundleLazy 'Shougo/neocomplete.vim', {
@@ -72,15 +79,6 @@ NeoBundleLazy 'Shougo/neosnippet-snippets', {
 \   'insert' : 1,
 \ },
 \ }
-
-NeoBundle 'yogomi/Flake8-vim', 'preparationForPython2.6'
-let g:PyFlakeOnQrite = 1
-let g:PyFlakeCheckers = 'pep8,mccabe,pyflakes'
-let g:PyFlakeDefaultComplexity=10
-let g:PyFlakeCWindow = 9
-let g:PyFlakeSigns = 1
-let g:PyFlakeMaxLineLength = 100
-let g:PyFlakeRangeCommand = 'Q'
 
 NeoBundle 'thinca/vim-quickrun'
 

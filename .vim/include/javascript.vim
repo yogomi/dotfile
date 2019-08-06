@@ -59,8 +59,3 @@ endfunction
 autocmd BufRead,BufNewFile *.js call SetNodejsLintConfig()
 autocmd BufRead,BufNewFile *.es call SetECMAScriptLintConfig()
 autocmd BufRead,BufNewFile *.jsx call SetReactLintConfig()
-
-highlight link SyntasticErrorSign SignColumn
-highlight link SyntasticWarningSign SignColumn
-highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
