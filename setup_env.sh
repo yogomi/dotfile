@@ -20,7 +20,6 @@ done
 
 mkdir -p .vim/bundle
 git clone ${NEOBUNDLE_GIT_URL} ${NEOBUNDLE_DIST_DIR}
-ln -sf ${PWD}/.vim ${HOME}/.vim
 
 mkdir -p ~/.vimcache/bak/
 mkdir ~/.vimcache/vimswap/
