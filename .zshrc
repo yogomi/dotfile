@@ -2,7 +2,7 @@
 
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
-PATH=${HOME}/bin:${HOME}/.rbenv/bin:/usr/local/Qt-5.3.1/bin:$PATH:${HOME}/.tmux/bin:$PATH
+PATH=${HOME}/bin:${HOME}/.rbenv/bin:${HOME}/Qt/5.12.4/clang_64/bin:$PATH:${HOME}/.tmux/bin:$PATH
 
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
