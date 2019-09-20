@@ -11,7 +11,11 @@ augroup MyAutoCmd
     autocmd!
 augroup END
 
-let ostype = system('uname')
+if has("win64")
+  let ostype = 'windows'
+else
+  let ostype = system('uname')
+endif
 
 call neobundle#begin(expand('~/.vim/bundle/'))
 
@@ -20,16 +24,18 @@ set clipboard+=unnamed
  " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
- " Recommended to install
- " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
-NeoBundle 'Shougo/vimproc', {
-    \ 'build' : {
-    \   'windows' : 'echo "X<"',
-    \   'cygwin' : 'make -f make_cygwin.mak',
-    \   'mac' : 'make -f make_mac.mak',
-    \   'unix' : 'make -f make_unix.mak',
-    \ },
-    \}
+if !has("win64")
+  " Recommended to install
+  " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
+  NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \   'windows' : 'nmake -f make_msvc.mak nodebug=1',
+      \   'cygwin' : 'make -f make_cygwin.mak',
+      \   'mac' : 'make -f make_mac.mak',
+      \   'unix' : 'make -f make_unix.mak',
+      \ },
+      \}
+endif
 
 " My Bundles here:
 "
@@ -105,31 +111,6 @@ NeoBundle 'embear/vim-localvimrc'
 let g:localvimrc_persistent = 1
 
 runtime! include/*.vim
-
-" NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim', {
-" \   'autoload' : {
-" \     'filetypes' : ['python'],
-" \   },
-" \ }
-" let g:enable_python_hl_lvar = 1
-" default is 'guifg=palegreen3 gui=NONE ctermfg=114 cterm=NONE'
-" let g:python_hl_lvar_highlight_color = 'guifg=palegreen3 gui=NONE ctermfg=186 cterm=NONE'
-
-" autocmd BufWinEnter  *.py PyHlLVar
-" autocmd BufWinLeave  *.py PyHlLVar
-" autocmd WinEnter     *.py PyHlLVar
-" autocmd BufWritePost *.py PyHlLVar
-" autocmd WinLeave     *.py PyHlLVar
-" autocmd TabEnter     *.py PyHlLVar
-" autocmd TabLeave     *.py PyHlLVar
-
-" ...
-
-"
-" Brief help
-" :NeoBundleList          - list configured bundles
-" :NeoBundleInstall(!)    - install(update) bundles
-" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
 " file encoding
 set encoding=utf-8
@@ -264,8 +245,10 @@ inoremap <expr><CR> neocomplete#smart_close_popup() . "\<CR>"
 inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-" <C-h>や<BS>を押したときに確実にポップアップを削除します
-inoremap <expr><C-h> neocomplete#smart_close_popup().”\<C-h>”
+if !has("win64")
+  " <C-h>や<BS>を押したときに確実にポップアップを削除します
+  inoremap <expr><C-h> neocomplete#smart_close_popup().”\<C-h>”
+endif
 
 " 現在選択している候補を確定します
 inoremap <expr><C-y> neocomplete#close_popup()
@@ -273,7 +256,9 @@ inoremap <expr><C-y> neocomplete#close_popup()
 " 現在選択している候補をキャンセルし、ポップアップを閉じます
 inoremap <expr><C-e> neocomplete#cancel_popup()
 
-set t_Co=256
+if !has("win64")
+  set t_Co=256
+endif
 set fileformats=unix,dos
 set incsearch
 set ignorecase
@@ -296,7 +281,7 @@ set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%0
 set laststatus=2
 
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
-set cursorline
+
 filetype plugin indent on     " Required!
 if has('path_extra')
     set tags& tags+=.tags,tags
@@ -307,7 +292,12 @@ set ambiwidth=double
 set noswapfile
 set nofoldenable
 
+set cursorline
+
 """ highlight
+highlight clear CursorLine
+highlight CursorLine gui=underline cterm=underline
+
 highlight Title term=bold ctermfg=121 gui=bold guifg=#60ff60
 """
 
