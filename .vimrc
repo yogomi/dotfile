@@ -301,11 +301,13 @@ set ambiwidth=double
 set noswapfile
 set nofoldenable
 
-set cursorline
-
 """ highlight
-highlight clear CursorLine
-highlight CursorLine gui=underline cterm=underline
+if !has("win64")
+  set cursorline
+
+  highlight clear CursorLine
+  highlight CursorLine gui=underline cterm=underline
+endif
 
 highlight Title term=bold ctermfg=121 gui=bold guifg=#60ff60
 """
