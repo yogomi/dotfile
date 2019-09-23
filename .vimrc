@@ -60,6 +60,12 @@ NeoBundle 'hail2u/vim-css3-syntax'
 """ syntastic lint系のため
 NeoBundle 'scrooloose/syntastic.git'
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+
 highlight link SyntasticErrorSign SignColumn
 highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
