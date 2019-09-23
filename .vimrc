@@ -4,7 +4,12 @@ set nocompatible
 filetype plugin on
 
 if has('vim_starting')
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+if has("win64")
+  set runtimepath^=~/.vim/
+  set runtimepath+=~/.vim/after/
 endif
 
 augroup MyAutoCmd
@@ -115,8 +120,6 @@ NeoBundle 'myhere/vim-nodejs-complete'
 NeoBundle 'embear/vim-localvimrc'
 
 let g:localvimrc_persistent = 1
-
-runtime! include/*.vim
 
 " file encoding
 set encoding=utf-8
@@ -345,4 +348,6 @@ endfunction
 
 map <Leader>s :call GetCursorSyntaxGroup()<CR>
 
-source ${HOME}/.vim/binary.vim
+source ~/.vim/binary.vim
+
+runtime! include/*.vim
