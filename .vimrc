@@ -126,6 +126,7 @@ set encoding=utf-8
 set fileencodings=utf-8,sjis,euc-jp
 set fileformats=unix,dos,mac
 
+runtime! include/*.vim
 
 " Installation check.
 NeoBundleCheck
@@ -351,5 +352,3 @@ endfunction
 map <Leader>s :call GetCursorSyntaxGroup()<CR>
 
 source ~/.vim/binary.vim
-
-runtime! include/*.vim
