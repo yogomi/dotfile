@@ -17,3 +17,5 @@ endfunction
 
 command! NoExpandTab call NoExpandTabFunc()
 command! ExpandTab call ExpandTabFunc()
+
+let g:syntastic_cpp_compiler_options = '--std=c++17'

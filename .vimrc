@@ -320,6 +320,10 @@ endif
 let g:quickrun_config["_"] = {
   \ "outputter/buffer/split" : ":rightbelow 8sp"
   \ }
+let g:quickrun_config.cpp = {
+  \   'command': 'g++',
+  \   'cmdopt': '-std=c++17'
+  \ }
 """
 
 """ cache
