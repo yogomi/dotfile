@@ -207,7 +207,8 @@ esac
 
 #docker
 alias goat="docker --tlsverify --tlscacert=${HOME}/.docker/certs-for-goat/ca.pem --tlscert=${HOME}/.docker/certs-for-goat/cert.pem --tlskey=${HOME}/.docker/certs-for-goat/key.pem -H=red-goat.japaneast.cloudapp.azure.com:2376"
-
+alias yacker="docker -H tcp://10.41.17.251:2376"
+alias ycompose="docker-compose -H tcp://10.41.17.251:2376"
 
 # node.js
 source ~/.zsh/.zrc.node.js.zsh
@@ -228,8 +229,5 @@ export PATH=${HOME}/workspace/sdk/google-cloud-sdk/bin:${PATH}
 
 # flutter
 export PATH=${HOME}/workspace/sdk/flutter/bin:${PATH}
-
-source /usr/local/bin/virtualenvwrapper.sh
-export WORKON_HOME=~/.virtualenvs
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

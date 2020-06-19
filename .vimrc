@@ -337,7 +337,7 @@ if v:version >= 703
   " for snippet_complete marker
   " conceal in insert (i), normal (n) and visual (v) modes
   set conceallevel=2 concealcursor=inv
-  set colorcolumn=79
+  set colorcolumn=99
 endif
 
 """
