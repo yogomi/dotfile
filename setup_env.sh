@@ -26,5 +26,9 @@ mkdir ~/.vimcache/vimswap/
 mkdir ~/.vimcache/undo/
 mkdir -p ~/.cache/shell
 
+rm -rf ${HOME}/.zsh/modules/zsh-context-sensitive-alias
+git clone https://github.com/uasi/zsh-context-sensitive-alias.git
+mv zsh-context-sensitive-alias ${HOME}/.zsh/modules/
+
 mkdir -p ${HOME}/bin
 ln -sf ${PWD}/bin/* ${HOME}/bin
