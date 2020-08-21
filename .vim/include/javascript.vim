@@ -1,8 +1,8 @@
 au BufRead,BufNewFile *.jsx set filetype=javascript
 
-NeoBundle 'othree/yajs.vim', { 'for': ['javascript'] }
-NeoBundle 'othree/es.next.syntax.vim', { 'for': ['javascript'] }
-NeoBundle 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript'] }
+call dein#add('othree/yajs.vim', { 'for': ['javascript'] })
+call dein#add('othree/es.next.syntax.vim', { 'for': ['javascript'] })
+call dein#add('othree/javascript-libraries-syntax.vim', { 'for': ['javascript'] })
 
 function! EnableJavascript()
   " Setup used libraries
@@ -21,10 +21,10 @@ autocmd MyVimrc FileType javascript call EnableJavascript()
 "   autocmd BufWrite *.js,*.jsx EsFix
 " augroup END
 
-NeoBundle 'othree/html5.vim'
+call dein#add('othree/html5.vim')
 
-NeoBundle 'mxw/vim-jsx', { 'for': ['javascript'] }
-NeoBundle 'ternjs/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' }
+call dein#add('mxw/vim-jsx', { 'for': ['javascript'] })
+call dein#add('ternjs/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' })
 
 " ESLint configuration
 set statusline+=%#warningmsg#

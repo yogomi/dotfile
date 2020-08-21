@@ -4,7 +4,7 @@ set nocompatible
 filetype plugin on
 
 if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 endif
 
 if has("win64")
@@ -22,115 +22,113 @@ else
   let ostype = system('uname')
 endif
 
-call neobundle#begin(expand('~/.vim/bundle/'))
+if dein#load_state('~/.cache/dein')
+  call dein#begin(expand('~/.cache/dein'))
 
-set clipboard+=unnamed
+  set clipboard+=unnamed
 
- " Let NeoBundle manage NeoBundle
-NeoBundleFetch 'Shougo/neobundle.vim'
+  " Let dein manage dein
+  call dein#add('Shougo/dein.vim')
 
-if !has("win64")
-  " Recommended to install
-  " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
-  NeoBundle 'Shougo/vimproc', {
-      \ 'build' : {
-      \   'windows' : 'nmake -f make_msvc.mak nodebug=1',
-      \   'cygwin' : 'make -f make_cygwin.mak',
-      \   'mac' : 'make -f make_mac.mak',
-      \   'unix' : 'make -f make_unix.mak',
-      \ },
-      \}
+  if !has("win64")
+    call dein#add('Shougo/vimproc.vim', {'build': {
+        \   'windows' : 'nmake -f make_msvc.mak nodebug=1',
+        \   'cygwin' : 'make -f make_cygwin.mak',
+        \   'mac' : 'make -f make_mac.mak',
+        \   'unix' : 'make -f make_unix.mak',
+        \ },
+        \})
+  endif
+
+  " My Bundles here:
+  "
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('Lokaltog/vim-easymotion')
+  call dein#add('rstacruz/sparkup', {'rtp': 'vim/'})
+
+  """ for html and js
+  call dein#add('mattn/emmet-vim')
+  let g:user_emmet_settings = {
+        \  'javascript.jsx' : {
+        \      'extends': 'jsx',
+        \      'quote_char': "'",
+        \  },
+        \}
+
+  call dein#add('hail2u/vim-css3-syntax')
+
+  """ syntastic lint系のため
+  call dein#add('scrooloose/syntastic.git')
+
+  let g:syntastic_always_populate_loc_list = 1
+  let g:syntastic_loc_list_height = 5
+  let g:syntastic_auto_loc_list = 0
+  let g:syntastic_check_on_open = 1
+  let g:syntastic_check_on_wq = 1
+
+  highlight link SyntasticErrorSign SignColumn
+  highlight link SyntasticWarningSign SignColumn
+  highlight link SyntasticStyleErrorSign SignColumn
+  highlight link SyntasticStyleWarningSign SignColumn
+  """
+
+  call dein#add('Shougo/neocomplete.vim', {
+  \   'autoload' : {
+  \     'insert' : 1,
+  \ },
+  \   'depends' : 'Shougo/context_filetype.vim',
+  \   'disabled' : !(has('lua') || has('luajit')),
+  \   'vim_version' : '8.0.69'
+  \ })
+  call dein#add('Shougo/neosnippet', {
+  \ 'autoload' : {
+  \   'mappings' : ['<Plug>(neosnippet_'],
+  \   'commands' : ['NeoSnippetClearMarkers', ],
+  \   'function_prefix' : 'neosnippet',
+  \ }})
+  call dein#add('Shougo/neosnippet-snippets', {
+  \ 'autoload' : {
+  \   'insert' : 1,
+  \ },
+  \ })
+
+  call dein#add('thinca/vim-quickrun')
+
+  call dein#add('altercation/vim-colors-solarized')
+
+  call dein#add('Shougo/unite.vim')
+  call dein#add('Shougo/unite-outline')
+  call dein#add('Shougo/vimfiler.vim')
+  " vim-scripts repos
+  call dein#add('vim-script/L9')
+  call dein#add('vim-script/rails.vim')
+  " Non github repos
+  call dein#add('vim-scripts/command-t')
+  call dein#add('yogomi/vim-cpplint')
+
+  call dein#add("tyru/caw.vim.git")
+
+  call dein#add('myhere/vim-nodejs-complete')
+
+  call dein#add('embear/vim-localvimrc')
+
+  let g:localvimrc_persistent = 1
+
+  " file encoding
+  set encoding=utf-8
+  set fileencodings=utf-8,sjis,euc-jp
+  set fileformats=unix,dos,mac
+
+  runtime! include/*.vim
+
+  " Installation check.
+  call dein#end()
+  call dein#save_state()
 endif
 
-" My Bundles here:
-"
-" Note: You don't set neobundle setting in .gvimrc!
-" Original repos on github
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-" NeoBundle 'Rykka/riv.vim'
-
-""" for html and js
-NeoBundle 'mattn/emmet-vim'
-let g:user_emmet_settings = {
-      \  'javascript.jsx' : {
-      \      'extends': 'jsx',
-      \      'quote_char': "'",
-      \  },
-      \}
-
-NeoBundle 'hail2u/vim-css3-syntax'
-
-""" syntastic lint系のため
-NeoBundle 'scrooloose/syntastic.git'
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_loc_list_height = 5
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
-
-highlight link SyntasticErrorSign SignColumn
-highlight link SyntasticWarningSign SignColumn
-highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
-"""
-
-NeoBundleLazy 'Shougo/neocomplete.vim', {
-\   'autoload' : {
-\     'insert' : 1,
-\ },
-\   'depends' : 'Shougo/context_filetype.vim',
-\   'disabled' : !(has('lua') || has('luajit')),
-\   'vim_version' : '8.0.69'
-\ }
-NeoBundleLazy 'Shougo/neosnippet', {
-\ 'autoload' : {
-\   'mappings' : ['<Plug>(neosnippet_'],
-\   'commands' : ['NeoSnippetClearMarkers', ],
-\   'function_prefix' : 'neosnippet',
-\ }}
-NeoBundleLazy 'Shougo/neosnippet-snippets', {
-\ 'autoload' : {
-\   'insert' : 1,
-\ },
-\ }
-
-NeoBundle 'thinca/vim-quickrun'
-
-NeoBundle 'altercation/vim-colors-solarized'
-
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'Shougo/vimfiler.vim'
-" vim-scripts repos
-NeoBundle 'L9'
-NeoBundle 'rails.vim'
-" Non github repos
-NeoBundle 'vim-scripts/command-t'
-" Non git repos
-" NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-NeoBundle 'yogomi/vim-cpplint'
-
-NeoBundle "tyru/caw.vim.git"
-
-NeoBundle 'myhere/vim-nodejs-complete'
-
-NeoBundle 'embear/vim-localvimrc'
-
-let g:localvimrc_persistent = 1
-
-" file encoding
-set encoding=utf-8
-set fileencodings=utf-8,sjis,euc-jp
-set fileformats=unix,dos,mac
-
-runtime! include/*.vim
-
-" Installation check.
-NeoBundleCheck
-call neobundle#end()
+if has('vim_starting') && dein#check_install()
+  call dein#install()
+endif
 
 set pastetoggle=<F10>
 

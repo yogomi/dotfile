@@ -5,8 +5,7 @@ PWD=`pwd`
 BACKUP_DIR=${PWD}/backup
 DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .nvm .synergy.conf"
 
-NEOBUNDLE_GIT_URL="git://github.com/Shougo/neobundle.vim"
-NEOBUNDLE_DIST_DIR="${PWD}/.vim/bundle/neobundle.vim"
+DEIN_INSTALL_SCRIPT="https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
 
 echo ${PWD}
 
@@ -18,8 +17,9 @@ do
     ln -sf ${PWD}/${file} ${HOME}/${file}
 done
 
-mkdir -p .vim/bundle
-git clone ${NEOBUNDLE_GIT_URL} ${NEOBUNDLE_DIST_DIR}
+mkdir -p .cache/dein
+curl ${DEIN_INSTALL_SCRIPT} > /tmp/dein_installer.sh
+sh /tmp/dein_installer.sh ~/.cache/dein
 
 mkdir -p ~/.vimcache/bak/
 mkdir ~/.vimcache/vimswap/
