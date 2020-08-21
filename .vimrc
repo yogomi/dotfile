@@ -99,9 +99,6 @@ if dein#load_state('~/.cache/dein')
   call dein#add('Shougo/unite.vim')
   call dein#add('Shougo/unite-outline')
   call dein#add('Shougo/vimfiler.vim')
-  " vim-scripts repos
-  call dein#add('vim-script/L9')
-  call dein#add('vim-script/rails.vim')
   " Non github repos
   call dein#add('vim-scripts/command-t')
   call dein#add('yogomi/vim-cpplint')
