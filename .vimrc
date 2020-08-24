@@ -22,10 +22,10 @@ else
   let ostype = system('uname')
 endif
 
+set clipboard+=unnamed
+
 if dein#load_state('~/.cache/dein')
   call dein#begin(expand('~/.cache/dein'))
-
-  set clipboard+=unnamed
 
   " Let dein manage dein
   call dein#add('Shougo/dein.vim')
