@@ -72,14 +72,12 @@ if dein#load_state('~/.cache/dein')
   highlight link SyntasticStyleWarningSign SignColumn
   """
 
-  call dein#add('Shougo/neocomplete.vim', {
-  \   'autoload' : {
-  \     'insert' : 1,
-  \ },
-  \   'depends' : 'Shougo/context_filetype.vim',
-  \   'disabled' : !(has('lua') || has('luajit')),
-  \   'vim_version' : '8.0.69'
-  \ })
+
+  call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
   call dein#add('Shougo/neosnippet', {
   \ 'autoload' : {
   \   'mappings' : ['<Plug>(neosnippet_'],
@@ -101,7 +99,6 @@ if dein#load_state('~/.cache/dein')
   call dein#add('Shougo/vimfiler.vim')
   " Non github repos
   call dein#add('vim-scripts/command-t')
-  call dein#add('yogomi/vim-cpplint')
 
   call dein#add("tyru/caw.vim.git")
 
@@ -180,8 +177,8 @@ if has("autocmd")
   \  endif
 endif
 
-""" cpplint
-autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
+" cpplint
+" autocmd BufWritePost *.h,*.cpp,*.cc call Cpplint()
 let g:cpplint_cmd_options="--linelength=100 --filter=-readability/streams,-build/c++11"
 """
 
@@ -208,43 +205,41 @@ let g:vimfiler_safe_mode_by_default = 0
 
 nnoremap ; :
 
-""" neocomplete
+""" deoplete
+let g:deoplete#enable_at_startup = 1
+
 " 補完ウィンドウの設定
 set completeopt=menuone
 
 " 起動時に有効化
-let g:neocomplete#enable_at_startup = 1
 
-" 大文字が入力されるまで大文字小文字の区別を無視する
-let g:neocomplete#enable_smart_case = 1
-
-" ポップアップメニューで表示される候補の数
-let g:neocomplete#max_list = 20
+" " 大文字が入力されるまで大文字小文字の区別を無視する
+" call deoplete#custom#option({
+"  \ 'auto_complete_delay':  0,
+"  \ 'smart_case': v:true,
+"  \ 'max_list': 50,
+"  \ 'keyword_patterns': {'defalut': '\h\w*'}
+"  \ })
 
 " シンタックスをキャッシュするときの最小文字長
-let g:neocomplete#sources#syntax#min_keyward_length = 3
+let g:deoplete#sources#syntax#min_keyward_length = 3
 
-" ディクショナリ定義
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'php' : $HOME . '/.vim/dict/php.dict',
-    \ 'ctp' : $HOME . '/.vim/dict/php.dict'
-    \ }
-
-if !exists('g:neocomplete#keyword_patterns')
-        let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+" " ディクショナリ定義
+let g:deoplete#sources#dictionary#dictionaries = {
+   \ 'default' : '',
+   \ 'php' : $HOME . '/.vim/dict/php.dict',
+   \ 'ctp' : $HOME . '/.vim/dict/php.dict'
+   \ }
 
 
 " 前回行われた補完をキャンセルします
-inoremap <expr><C-g> neocomplete#undo_completion()
+inoremap <expr><C-g> deoplete#undo_completion()
 
 " 補完候補のなかから、共通する部分を補完します
-inoremap <expr><C-l> neocomplete#complete_common_string()
+inoremap <expr><C-l> deoplete#complete_common_string()
 
 " 改行で補完ウィンドウを閉じる
-inoremap <expr><CR> neocomplete#smart_close_popup() . "\<CR>"
+inoremap <expr><CR> deoplete#smart_close_popup() . "\<CR>"
 
 "tabで補完候補の選択を行う
 inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -252,14 +247,14 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 if !has("win64")
   " <C-h>や<BS>を押したときに確実にポップアップを削除します
-  inoremap <expr><C-h> neocomplete#smart_close_popup().”\<C-h>”
+  inoremap <expr><C-h> deoplete#smart_close_popup().”\<C-h>”
 endif
 
 " 現在選択している候補を確定します
-inoremap <expr><C-y> neocomplete#close_popup()
+inoremap <expr><C-y> deoplete#close_popup()
 
 " 現在選択している候補をキャンセルし、ポップアップを閉じます
-inoremap <expr><C-e> neocomplete#cancel_popup()
+inoremap <expr><C-e> deoplete#cancel_popup()
 
 if !has("win64")
   set t_Co=256
@@ -323,17 +318,23 @@ let g:quickrun_config.cpp = {
 
 """ cache
 nnoremap x "_x
-set backupdir=~/.vimcache/bak
-set viminfo& viminfo+=n~/.vimcache/viminfo
-if v:version >= 703
-    set undodir=~/.vimcache/undo
-    set undofile
 
-  " for snippet_complete marker
-  " conceal in insert (i), normal (n) and visual (v) modes
-  set conceallevel=2 concealcursor=inv
-  set colorcolumn=99
+if has('nvim')
+  set backupdir=~/.nvimcache/bak
+  set viminfo& viminfo+=n~/.nvimcache/viminfo
+  set undodir=~/.nvimcache/undo
+else
+  set backupdir=~/.vimcache/bak
+  set viminfo& viminfo+=n~/.vimcache/viminfo
+  set undodir=~/.vimcache/undo
 endif
+
+set undofile
+
+" for snippet_complete marker
+" conceal in insert (i), normal (n) and visual (v) modes
+set conceallevel=2 concealcursor=inv
+set colorcolumn=99
 
 """
 
