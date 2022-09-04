@@ -1,0 +1,18 @@
+{
+  "title": "Keyboard click",
+  "rules": [
+    {
+      "description": "click with command + ctrl + 2",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "2",
+              "modifiers": { "mandatory": [ "command", "control" ] }
+          },
+          "to": [{ "pointing_button": "button1" }]
+        }
+      ]
+    }
+  ]
+}
