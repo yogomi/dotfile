@@ -7,6 +7,9 @@ DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .nvm .synerg
 
 DEIN_INSTALL_SCRIPT="https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
 
+git config --global user.name "Makoto Yano"
+git config --global user.email "yan133@gmail.com"
+
 echo ${PWD}
 
 git submodule init & git submodule update

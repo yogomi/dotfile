@@ -1,6 +1,6 @@
 # Created by newuser for 4.3.17
 
-export PATH="/usr/local/bin:$PATH"
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
 PATH=${HOME}/bin:${HOME}/.rbenv/bin:${HOME}/Qt/5.12.4/clang_64/bin:$PATH:${HOME}/.tmux/bin:$PATH
 
