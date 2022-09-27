@@ -9,6 +9,7 @@ DEIN_INSTALL_SCRIPT="https://raw.githubusercontent.com/Shougo/dein.vim/master/bi
 
 git config --global user.name "Makoto Yano"
 git config --global user.email "yan133@gmail.com"
+git config --global init.defaultBranch main
 
 echo ${PWD}
 

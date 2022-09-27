@@ -131,7 +131,7 @@ alias ll='ls -alh'
 
 if which peco > /dev/null; then
     echo 'use peco'
-    source ~/.zsh/.zrc.peco.zsh
+    source ~/.zsh/zrc.peco.zsh
     function _insert_pecopipe() {
         LBUFFER=${LBUFFER}" | peco"
     }
@@ -139,6 +139,12 @@ if which peco > /dev/null; then
     bindkey '^[^[' _insert_pecopipe
 else
     echo 'no peco'
+fi
+
+if which python3 > /dev/null; then
+    source ~/.zsh/zrc.python3.zsh
+else
+    echo 'no python3'
 fi
 
 #docker
@@ -193,14 +199,14 @@ HELPDIR=/usr/local/share/zsh/helpfiles
 eval "$(rbenv init -)"
 case ${OSTYPE} in
   darwin*)
-    source ~/.zsh/.darwin/*
+    source ~/.zsh/darwin/*
     ;;
   linux*)
     ;;
 esac
 
 # node.js
-source ~/.zsh/.zrc.node.js.zsh
+source ~/.zsh/zrc.node.js.zsh
 export PATH="/usr/local/sbin:./node_modules/.bin:$PATH"
 
 # go
