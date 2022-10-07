@@ -3,7 +3,7 @@
 
 PWD=`pwd`
 BACKUP_DIR=${PWD}/backup
-DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .nvm .synergy.conf"
+DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .nvm .synergy.conf .config/nvim"
 
 DEIN_INSTALL_SCRIPT="https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
 
@@ -24,6 +24,8 @@ done
 mkdir -p .cache/dein
 curl ${DEIN_INSTALL_SCRIPT} > /tmp/dein_installer.sh
 sh /tmp/dein_installer.sh ~/.cache/dein
+
+pip3 install --user --upgrade pynvim
 
 mkdir -p ~/.vimcache/bak/
 mkdir ~/.vimcache/vimswap/

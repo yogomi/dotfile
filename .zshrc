@@ -115,7 +115,7 @@ autoload -U colors; colors
 
 
 alias g=git
-alias v=vim
+alias nv=nvim
 alias sl=ls
 case "${OSTYPE}" in
 darwin*)
@@ -126,6 +126,11 @@ linux*)
     alias ls='ls --color=auto'
     ;;
 esac
+
+if which nvim > /dev/null; then
+    echo 'use nvim as vim'
+    alias vim=nvim
+fi
 
 alias ll='ls -alh'
 
