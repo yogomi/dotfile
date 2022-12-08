@@ -32,104 +32,72 @@ if has("autocmd")
   \  endif
 endif
 
-if has('vim_starting')
-  set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+call plug#begin('~/.local/share/nvim/plugged')
+
+if !has("win64")
+  Plug 'Shougo/vimproc.vim', {'dir': '~/.vim/plugged/vimproc.vim', 'do': 'make'}
 endif
 
-if dein#load_state('~/.cache/dein')
-  call dein#begin(expand('~/.cache/dein'))
+" My Bundles here:
+"
+Plug 'tpope/vim-fugitive'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'rstacruz/sparkup'
+Plug 'tyru/caw.vim'
 
-  " Let dein manage dein
-  call dein#add('Shougo/dein.vim')
+""" for html and js
+Plug 'mattn/emmet-vim'
+let g:user_emmet_settings = {
+      \  'javascript.jsx' : {
+      \      'extends': 'jsx',
+      \      'quote_char': "'",
+      \  },
+      \}
 
-  if !has("win64")
-    call dein#add('Shougo/vimproc.vim', {'build': {
-        \   'windows' : 'nmake -f make_msvc.mak nodebug=1',
-        \   'cygwin' : 'make -f make_cygwin.mak',
-        \   'mac' : 'make -f make_mac.mak',
-        \   'unix' : 'make -f make_unix.mak',
-        \ },
-        \})
-  endif
+Plug 'hail2u/vim-css3-syntax'
 
-  " My Bundles here:
-  "
-  call dein#add('tpope/vim-fugitive')
-  call dein#add('Lokaltog/vim-easymotion')
-  call dein#add('rstacruz/sparkup', {'rtp': 'vim/'})
+""" syntastic lint系のため
+Plug 'vim-syntastic/syntastic'
 
-  """ for html and js
-  call dein#add('mattn/emmet-vim')
-  let g:user_emmet_settings = {
-        \  'javascript.jsx' : {
-        \      'extends': 'jsx',
-        \      'quote_char': "'",
-        \  },
-        \}
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
 
-  call dein#add('hail2u/vim-css3-syntax')
-
-  """ syntastic lint系のため
-  call dein#add('scrooloose/syntastic.git')
-
-  let g:syntastic_always_populate_loc_list = 1
-  let g:syntastic_loc_list_height = 5
-  let g:syntastic_auto_loc_list = 0
-  let g:syntastic_check_on_open = 1
-  let g:syntastic_check_on_wq = 1
-
-  highlight link SyntasticErrorSign SignColumn
-  highlight link SyntasticWarningSign SignColumn
-  highlight link SyntasticStyleErrorSign SignColumn
-  highlight link SyntasticStyleWarningSign SignColumn
-  """
+highlight link SyntasticErrorSign SignColumn
+highlight link SyntasticWarningSign SignColumn
+highlight link SyntasticStyleErrorSign SignColumn
+highlight link SyntasticStyleWarningSign SignColumn
+"""
 
 
-  call dein#add('Shougo/deoplete.nvim')
-  if !has('nvim')
-    call dein#add('roxma/nvim-yarp')
-    call dein#add('roxma/vim-hug-neovim-rpc')
-  endif
-  call dein#add('Shougo/neosnippet', {
-  \ 'autoload' : {
-  \   'mappings' : ['<Plug>(neosnippet_'],
-  \   'commands' : ['NeoSnippetClearMarkers', ],
-  \   'function_prefix' : 'neosnippet',
-  \ }})
-  call dein#add('Shougo/neosnippet-snippets', {
-  \ 'autoload' : {
-  \   'insert' : 1,
-  \ },
-  \ })
-
-  call dein#add('thinca/vim-quickrun')
-
-  call dein#add('altercation/vim-colors-solarized')
-
-  call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/unite-outline')
-  call dein#add('Shougo/vimfiler.vim')
-  " Non github repos
-  call dein#add('vim-scripts/command-t')
-
-  call dein#add("tyru/caw.vim.git")
-
-  call dein#add('myhere/vim-nodejs-complete')
-
-  call dein#add('embear/vim-localvimrc')
-
-  let g:localvimrc_persistent = 1
-
-  runtime! include/*.vim
-
-  " Installation check.
-  call dein#end()
-  call dein#save_state()
+Plug 'Shougo/deoplete.nvim'
+if !has('nvim')
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 endif
+Plug 'Shougo/neosnippet', {'on': 'NeoSnippetClearMarkers'}
+Plug 'Shougo/neosnippet-snippets'
 
-if has('vim_starting') && dein#check_install()
-  call dein#install()
-endif
+Plug 'thinca/vim-quickrun'
+
+Plug 'altercation/vim-colors-solarized'
+
+Plug 'Shougo/vimfiler.vim'
+" Non github repos
+Plug 'vim-scripts/command-t'
+
+
+Plug 'myhere/vim-nodejs-complete'
+
+Plug 'embear/vim-localvimrc'
+
+let g:localvimrc_persistent = 1
+
+runtime! include/*.vim
+
+call plug#end()
 
 """ key bind
 
@@ -332,8 +300,8 @@ set colorcolumn=99
 """
 
 """ comment out
-nmap <C-Z> <Plug>(caw:i:toggle)
-vmap <C-Z> <Plug>(caw:i:toggle)
+nmap <C-Z> <Plug>(caw:hatpos:toggle)
+vmap <C-Z> <Plug>(caw:hatpos:toggle)
 """
 
 function! GetCursorSyntaxGroup()

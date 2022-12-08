@@ -21,9 +21,8 @@ do
     ln -sf ${PWD}/${file} ${HOME}/${file}
 done
 
-mkdir -p .cache/dein
-curl ${DEIN_INSTALL_SCRIPT} > /tmp/dein_installer.sh
-sh /tmp/dein_installer.sh ~/.cache/dein
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 pip3 install --user --upgrade pynvim
 
