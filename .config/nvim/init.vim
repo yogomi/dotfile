@@ -84,6 +84,7 @@ Plug 'thinca/vim-quickrun'
 
 Plug 'altercation/vim-colors-solarized'
 
+Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimfiler.vim'
 " Non github repos
 Plug 'vim-scripts/command-t'
