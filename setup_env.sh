@@ -16,6 +16,7 @@ echo ${PWD}
 
 git submodule init & git submodule update
 
+mkdir -p ~/.config
 for file in ${DOTFILES}
 do
     rm -rf ${HOME}/${file}
