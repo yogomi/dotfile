@@ -25,7 +25,7 @@ done
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-pip3 install --user --upgrade pynvim
+python -m pip install --user --upgrade pynvim
 
 mkdir -p ~/.vimcache/bak/
 mkdir ~/.vimcache/vimswap/
