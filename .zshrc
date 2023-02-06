@@ -8,7 +8,6 @@ export EDITOR=vim
 export LANG=ja_JP.UTF-8
 export LC_ALL=ja_JP.UTF-8
 export AUTOFEATURE=true
-
 bindkey -e
 
 setopt auto_cd
@@ -229,6 +228,9 @@ export PATH=${HOME}/workspace/sdk/google-cloud-sdk/bin:${PATH}
 
 # flutter
 export PATH=${HOME}/workspace/sdk/flutter/bin:${PATH}
+
+# aws
+source ~/.zsh/aws.zsh
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
