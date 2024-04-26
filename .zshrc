@@ -240,3 +240,5 @@ export NVM_DIR="$HOME/.nvm"
 
 # rust
 export PATH="$HOME/.cargo/bin:${PATH}"
+
+eval "$(direnv hook zsh)"
