@@ -145,6 +145,8 @@ else
     echo 'no peco'
 fi
 
+source ~/.zsh/zrc.pyenv.zsh
+
 if which python3 > /dev/null; then
     source ~/.zsh/zrc.python3.zsh
 else
