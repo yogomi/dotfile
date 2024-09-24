@@ -47,3 +47,4 @@ ln -sf ${PWD}/bin/* ${HOME}/bin
 wget wget https://github.com/peco/peco/releases/download/v0.5.11/peco_linux_amd64.tar.gz
 tar xzf peco_linux_amd64.tar.gz
 mv peco_linux_amd64/peco ${HOME}/bin/
+rm -rf peco_linux_amd64*
