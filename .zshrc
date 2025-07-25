@@ -244,3 +244,4 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$HOME/.cargo/bin:${PATH}"
 
 eval "$(direnv hook zsh)"
+export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
