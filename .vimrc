@@ -106,6 +106,8 @@ if dein#load_state('~/.cache/dein')
 
   call dein#add('embear/vim-localvimrc')
 
+  call dein#add('github/copilot')
+
   let g:localvimrc_persistent = 1
 
   " file encoding

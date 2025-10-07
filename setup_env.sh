@@ -3,7 +3,7 @@
 
 PWD=`pwd`
 BACKUP_DIR=${PWD}/backup
-DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .nvm .synergy.conf .config/nvim"
+DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .synergy.conf"
 
 DEIN_INSTALL_SCRIPT="https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
 
@@ -16,17 +16,14 @@ echo ${PWD}
 
 git submodule init & git submodule update
 
+ln -sf ${PWD}/neovim-settings ${HOME}/.config/nvim
+
 mkdir -p ~/.config
 for file in ${DOTFILES}
 do
     rm -rf ${HOME}/${file}
     ln -sf ${PWD}/${file} ${HOME}/${file}
 done
-
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-python -m pip install --user --upgrade pynvim
 
 mkdir -p ~/.vimcache/bak/
 mkdir ~/.vimcache/vimswap/
@@ -44,7 +41,10 @@ mv zsh-context-sensitive-alias ${HOME}/.zsh/modules/
 mkdir -p ${HOME}/bin
 ln -sf ${PWD}/bin/* ${HOME}/bin
 
-wget wget https://github.com/peco/peco/releases/download/v0.5.11/peco_linux_amd64.tar.gz
-tar xzf peco_linux_amd64.tar.gz
-mv peco_linux_amd64/peco ${HOME}/bin/
-rm -rf peco_linux_amd64*
+# Macだったらbrewで、Linuxだったらaptで必要なものを入れる
+if [ "$(uname)" == "Darwin" ]; then
+   brew install neovim tmux zsh peco
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+   sudo apt update
+   sudo apt install -y neovim tmux zsh peco xclip
+fi
