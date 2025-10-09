@@ -16,7 +16,11 @@ echo ${PWD}
 
 git submodule init & git submodule update
 
-ln -sf ${PWD}/neovim-settings ${HOME}/.config/nvim
+NEOVIM_SETTINGS_DIR=${HOME}/.config/nvim
+if [ -d ${NEOVIM_SETTINGS_DIR} ]; then
+  rm -rf ${NEOVIM_SETTINGS_DIR}
+fi
+ln -sf ${PWD}/neovim-settings ${NEOVIM_SETTINGS_DIR}
 
 mkdir -p ~/.config
 for file in ${DOTFILES}
