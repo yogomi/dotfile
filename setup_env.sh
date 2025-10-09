@@ -53,8 +53,14 @@ if [ "$(uname)" == "Darwin" ]; then
    brew install neovim tmux zsh peco
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    sudo apt update
-   sudo apt install -y tmux zsh peco xclip
+   sudo apt install -y tmux zsh xclip
    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
    sudo rm -rf /opt/nvim-linux-x86_64
    sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+
+   # aptにも存在するが、文字化けする。
+   # 公式から直接入れたほうが良い
+   wget https://github.com/peco/peco/releases/download/v0.5.11/peco_linux_amd64.tar.gz
+   tar -xzf peco_linux_amd64.tar.gz
+   sudo mv peco_linux_amd64/peco /usr/local/bin
 fi
