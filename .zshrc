@@ -126,6 +126,7 @@ linux*)
     ;;
 esac
 
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 if which nvim > /dev/null; then
     echo 'use nvim as vim'
     alias vim=nvim

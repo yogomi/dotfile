@@ -45,10 +45,16 @@ mv zsh-context-sensitive-alias ${HOME}/.zsh/modules/
 mkdir -p ${HOME}/bin
 ln -sf ${PWD}/bin/* ${HOME}/bin
 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+nvm install --lts
+
 # Macだったらbrewで、Linuxだったらaptで必要なものを入れる
 if [ "$(uname)" == "Darwin" ]; then
    brew install neovim tmux zsh peco
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    sudo apt update
-   sudo apt install -y neovim tmux zsh peco xclip
+   sudo apt install -y tmux zsh peco xclip
+   curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+   sudo rm -rf /opt/nvim-linux-x86_64
+   sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
 fi
