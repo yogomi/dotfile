@@ -3,4 +3,4 @@
 	url = https://github.com/uasi/zsh-context-sensitive-alias.git
 [submodule "neovim-settings"]
 	path = neovim-settings
-	url = https://github.com/yogomi/neovim-settings.git
+	url = git@github.com:yogomi/neovim-settings.git
