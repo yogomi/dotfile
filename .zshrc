@@ -241,3 +241,10 @@ export PATH="$HOME/.cargo/bin:${PATH}"
 
 eval "$(direnv hook zsh)"
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+
+if which copilot > /dev/null; then
+    echo 'use copilot'
+    source ~/.zsh/copilot.zsh
+else
+    echo 'no copilot'
+fi

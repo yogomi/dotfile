@@ -16,12 +16,6 @@ echo ${PWD}
 
 git submodule init & git submodule update
 
-NEOVIM_SETTINGS_DIR=${HOME}/.config/nvim
-if [ -d ${NEOVIM_SETTINGS_DIR} ]; then
-  rm -rf ${NEOVIM_SETTINGS_DIR}
-fi
-ln -sf ${PWD}/neovim-settings ${NEOVIM_SETTINGS_DIR}
-
 mkdir -p ~/.config
 for file in ${DOTFILES}
 do
@@ -64,3 +58,9 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    tar -xzf peco_linux_amd64.tar.gz
    sudo mv peco_linux_amd64/peco /usr/local/bin
 fi
+
+NEOVIM_SETTINGS_DIR=${HOME}/.config/nvim
+if [ -d ${NEOVIM_SETTINGS_DIR} ]; then
+  rm -rf ${NEOVIM_SETTINGS_DIR}
+fi
+ln -sf ${PWD}/neovim-settings ${NEOVIM_SETTINGS_DIR}
