@@ -1,0 +1,23 @@
+{
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
+  },
+  "voice": {
+    "enabled": false,
+    "mode": "hold"
+  },
+  "voiceEnabled": false,
+  "hooks": {
+    "Stop": {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "~/bin/notify-sound.sh"
+        }
+      ]
+    }
+  }
+}
