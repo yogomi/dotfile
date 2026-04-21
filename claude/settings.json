@@ -10,14 +10,16 @@
   },
   "voiceEnabled": false,
   "hooks": {
-    "Stop": {
-      "matcher": "",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "~/bin/notify-sound.sh"
-        }
-      ]
-    }
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/bin/notify-sound.sh"
+          }
+        ]
+      }
+    ]
   }
 }
