@@ -39,6 +39,9 @@ mv zsh-context-sensitive-alias ${HOME}/.zsh/modules/
 mkdir -p ${HOME}/bin
 ln -sf ${PWD}/bin/* ${HOME}/bin
 
+mkdir -p ~/.claude
+ln -sf ${PWD}/CLAUDE.md ${HOME}/.claude/CLAUDE.md
+
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 nvm install --lts
 
