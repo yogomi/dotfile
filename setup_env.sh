@@ -3,7 +3,7 @@
 
 PWD=`pwd`
 BACKUP_DIR=${PWD}/backup
-DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .synergy.conf"
+DOTFILES=".vimrc .zshrc .zprofile .zsh .vim .tmux .tmux.conf .tigrc .synergy.conf .claude-ntfy-topic"
 
 DEIN_INSTALL_SCRIPT="https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
 
