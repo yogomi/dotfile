@@ -14,11 +14,14 @@ fi
 
 echo "ntfy-claude-listener: トピック '${NTFY_TOPIC}' を監視中..."
 
-ntfy subscribe "${NTFY_TOPIC}-stop" \
+# --since $(date +%s) で起動時点以降のメッセージのみ受信（キャッシュ再生を防ぐ）
+SINCE=$(date +%s)
+
+ntfy subscribe --since "$SINCE" "${NTFY_TOPIC}-stop" \
   'afplay /System/Library/Sounds/Glass.aiff' &
 PID_STOP=$!
 
-ntfy subscribe "${NTFY_TOPIC}-notify" \
+ntfy subscribe --since "$SINCE" "${NTFY_TOPIC}-notify" \
   'afplay /System/Library/Sounds/Submarine.aiff' &
 PID_NOTIFY=$!
 
