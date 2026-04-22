@@ -49,7 +49,7 @@ nvm install --lts
 
 # Macだったらbrewで、Linuxだったらaptで必要なものを入れる
 if [ "$(uname)" == "Darwin" ]; then
-   brew install neovim tmux zsh peco
+   brew install neovim tmux zsh peco ntfy
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    sudo apt update
    sudo apt install -y tmux zsh xclip
@@ -69,3 +69,14 @@ if [ -d ${NEOVIM_SETTINGS_DIR} ]; then
   rm -rf ${NEOVIM_SETTINGS_DIR}
 fi
 ln -sf ${PWD}/neovim-settings ${NEOVIM_SETTINGS_DIR}
+
+# ntfy経由のClaude通知リスナー（Macのみ）
+if [ "$(uname)" == "Darwin" ]; then
+  PLIST_SRC="${PWD}/LaunchAgents/com.yan.claude-ntfy-listener.plist"
+  PLIST_DST="${HOME}/Library/LaunchAgents/com.yan.claude-ntfy-listener.plist"
+  launchctl unload "$PLIST_DST" 2>/dev/null || true
+  ln -sf "$PLIST_SRC" "$PLIST_DST"
+  launchctl load "$PLIST_DST"
+  echo "LaunchAgent com.yan.claude-ntfy-listener をロードしました。"
+  echo "SSH接続先サーバーにも ~/.claude-ntfy-topic を作成してください。"
+fi
