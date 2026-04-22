@@ -1,15 +1,16 @@
 {
-  "enabledPlugins": {
-    "pyright-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true
-  },
-  "voice": {
-    "enabled": false,
-    "mode": "hold"
-  },
-  "voiceEnabled": false,
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "for s in $(find /run/user/$(id -u)/ -maxdepth 1 -name 'nvim.*' 2>/dev/null); do nvim --server \"$s\" --remote-send '<Cmd>checktime<CR>' 2>/dev/null; done; true"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",
@@ -32,5 +33,16 @@
         ]
       }
     ]
-  }
+  },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
+  },
+  "voice": {
+    "enabled": false,
+    "mode": "hold"
+  },
+  "voiceEnabled": false,
+  "language": "Japanese"
 }
