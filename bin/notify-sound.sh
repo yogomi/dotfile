@@ -8,6 +8,7 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
     curl -s -X POST -d "stop" "https://ntfy.sh/${NTFY_TOPIC}-stop" > /dev/null &
   fi
 else
-  # ローカル → afplayで直接鳴らす
+  # ローカル → 最終Stop時刻を記録してafplayで鳴らす
+  date +%s > /tmp/claude-stop-local-last
   afplay /System/Library/Sounds/Glass.aiff
 fi

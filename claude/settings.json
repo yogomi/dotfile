@@ -39,10 +39,12 @@
     "typescript-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true
   },
+  "language": "Japanese",
   "voice": {
-    "enabled": false,
+    "enabled": true,
     "mode": "hold"
   },
-  "voiceEnabled": false,
-  "language": "Japanese"
+  "theme": "dark-ansi",
+  "editorMode": "vim",
+  "voiceEnabled": true
 }

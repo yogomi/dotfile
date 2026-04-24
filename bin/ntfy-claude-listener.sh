@@ -15,15 +15,15 @@ fi
 echo "ntfy-claude-listener: トピック '${NTFY_TOPIC}' を監視中..."
 
 # 起動時点以降のメッセージのみ受信（キャッシュ再配信防止）
-# デバウンス処理はコールバック側で行う（再起動時の2重鳴り対策）
+# デバウンス処理とメッセージ鮮度チェックはコールバック側で行う（再接続時の古メッセージ再生防止）
 SINCE=$(date +%s)
 
 ntfy subscribe --since "$SINCE" "${NTFY_TOPIC}-stop" \
-  'ts=$(date +%s); lf=/tmp/ntfy-stop-last; last=$(cat "$lf" 2>/dev/null||echo 0); [ $((ts-last)) -gt 15 ] && echo "$ts">"$lf" && afplay /System/Library/Sounds/Glass.aiff' &
+  'now=$(date +%s); age=$((now - ${NTFY_TIME:-0})); [ "$age" -gt 60 ] && exit 0; lf=/tmp/ntfy-stop-last; last=$(cat "$lf" 2>/dev/null||echo 0); [ $((now-last)) -gt 15 ] && echo "$now">"$lf" && afplay /System/Library/Sounds/Glass.aiff' &
 PID_STOP=$!
 
 ntfy subscribe --since "$SINCE" "${NTFY_TOPIC}-notify" \
-  'ts=$(date +%s); lf=/tmp/ntfy-notify-last; last=$(cat "$lf" 2>/dev/null||echo 0); [ $((ts-last)) -gt 15 ] && echo "$ts">"$lf" && afplay /System/Library/Sounds/Submarine.aiff' &
+  'now=$(date +%s); age=$((now - ${NTFY_TIME:-0})); [ "$age" -gt 60 ] && exit 0; lf=/tmp/ntfy-notify-last; last=$(cat "$lf" 2>/dev/null||echo 0); [ $((now-last)) -gt 15 ] && echo "$now">"$lf" && afplay /System/Library/Sounds/Submarine.aiff' &
 PID_NOTIFY=$!
 
 trap "kill $PID_STOP $PID_NOTIFY 2>/dev/null; exit 0" TERM INT
