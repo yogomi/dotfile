@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# gitリポジトリ内でclaudeを起動する際、プロジェクトルート名をセッション名として使う。
+# 同名セッションが既にあれば resume、なければ新規作成する。
+
+GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+
+if [ -z "$GIT_ROOT" ]; then
+  exec claude
+fi
+
+SESSION_NAME=$(basename "$GIT_ROOT")
+PROJECT_KEY=$(echo "$GIT_ROOT" | sed 's/[^a-zA-Z0-9]/-/g')
+PROJECT_DIR="$HOME/.claude/projects/$PROJECT_KEY"
+
+if [ -d "$PROJECT_DIR" ] && \
+   grep -rl "\"agentName\":\"$SESSION_NAME\"" "$PROJECT_DIR" 2>/dev/null | grep -q .; then
+  exec claude --resume "$SESSION_NAME"
+else
+  exec claude --name "$SESSION_NAME"
+fi
