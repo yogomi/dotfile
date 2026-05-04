@@ -40,9 +40,18 @@ mkdir -p ${HOME}/bin
 ln -sf ${PWD}/bin/* ${HOME}/bin
 
 mkdir -p ~/.claude
+mkdir -p ~/.claude-work
+mkdir -p ~/.claude-personal
+mkdir -p ~/.claude/ide
+ln -sfn ~/.claude/ide ~/.claude-personal/ide
+ln -sfn ~/.claude/ide ~/.claude-work/ide
 curl -fsSL https://claude.ai/install.sh | bash
 ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude/CLAUDE.md
+ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude-work/CLAUDE.md
+ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude-personal/CLAUDE.md
 ln -sf ${PWD}/claude/settings.json ${HOME}/.claude/settings.json
+ln -sf ${PWD}/claude/settings.json ${HOME}/.claude-work/settings.json
+ln -sf ${PWD}/claude/settings.json ${HOME}/.claude-personal/settings.json
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 nvm install --lts
