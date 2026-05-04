@@ -13,8 +13,24 @@ SESSION_NAME=$(basename "$GIT_ROOT")
 PROJECT_KEY=$(echo "$GIT_ROOT" | sed 's/[^a-zA-Z0-9]/-/g')
 PROJECT_DIR="$HOME/.claude/projects/$PROJECT_KEY"
 
-if [ -d "$PROJECT_DIR" ] && \
-   grep -rl "\"agentName\":\"$SESSION_NAME\"" "$PROJECT_DIR" 2>/dev/null | grep -q .; then
+cd "$GIT_ROOT" || exec claude
+
+SESSION_FILES=$(grep -El \
+  "\"agentName\":\"${SESSION_NAME}\"|\"customTitle\":\"${SESSION_NAME}\"" \
+  "$PROJECT_DIR"/*.jsonl 2>/dev/null)
+SESSION_COUNT=$(echo "$SESSION_FILES" | grep -c . 2>/dev/null)
+
+if [ "$SESSION_COUNT" -gt 1 ]; then
+  LATEST=$(echo "$SESSION_FILES" | xargs ls -t | head -1)
+  CLEARED_AT=$(date +%Y%m%d_%H%M%S)
+  echo "$SESSION_FILES" | grep -v "^$LATEST$" | while read -r f; do
+    sed -i '' \
+      -e "s/\"agentName\":\"${SESSION_NAME}\"/\"agentName\":\"${SESSION_NAME}__cleared_at_${CLEARED_AT}\"/g" \
+      -e "s/\"customTitle\":\"${SESSION_NAME}\"/\"customTitle\":\"${SESSION_NAME}__cleared_at_${CLEARED_AT}\"/g" \
+      "$f"
+  done
+  exec claude --resume "$SESSION_NAME"
+elif [ "$SESSION_COUNT" -eq 1 ]; then
   exec claude --resume "$SESSION_NAME"
 else
   exec claude --name "$SESSION_NAME"
