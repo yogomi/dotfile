@@ -46,5 +46,6 @@
   },
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "tui": "default"
 }

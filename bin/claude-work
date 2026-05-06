@@ -1,0 +1,2 @@
+#!/bin/bash
+CLAUDE_CONFIG_DIR=~/.claude-work exec ~/bin/claude-project
