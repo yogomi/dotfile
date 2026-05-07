@@ -11,6 +11,8 @@
 - 作業の話題が変わった際、未コミットの変更が残っていると判断した場合は、
   次の話題に軽く応答した上でコミットのリマインドを行う
 - コミット完了後、必要と感じた場合はリマインド前の作業への誘導を行う
+- コミット前にlint・型チェックのスクリプトやコマンドが存在する場合は必ず実行し、
+  エラーがないことを確認してからコミットする
 - ファイルの作成・編集・削除を伴う作業を始める前に、以下の手順を踏むこと：
   1. 変更の目的・対象ファイル・変更内容の概要を説明し、必要であれば議論する
   2. 合意が得られたら「この内容で作業を進めてよいですか？」と一度だけ確認する
@@ -33,6 +35,11 @@
 - TypeScriptのセミコロンは省略しない
 - ORMはsequelizeを使う
 - APIサーバーはExpressを使う
+- フロントエンドのHTTPクライアントはfetchを使う（axiosは使わない）。ラッパーは `frontend/src/utils/api.ts` に置く
+- LintにはESLint（v9 flat config）+ `typescript-eslint` を使う
+- フロントエンドは追加で `eslint-plugin-react-hooks` を導入する
+- コードフォーマットにはPrettierを使う（ルートの `.prettierrc` で一元管理）
+- `lint`・`format`・`typecheck` スクリプトを各パッケージおよびルートに用意する
 - REST APIのJSONレスポンス形式：
 
 ```json
@@ -180,6 +187,11 @@
 ## Python
 
 - モジュール・クラス・関数（公開APIを中心）には必ず docstring（Google スタイル）を付与し、説明・引数・戻り値・例外・副作用を記載
+- LintおよびフォーマットにはRuffを使う（`ruff check` + `ruff format`）
+- 型チェックにはPyrightを使う（`pyrightconfig.json` をプロジェクトルートに置く）
+- 設定は `pyproject.toml` の `[tool.ruff]` セクションにまとめる
+  （`line-length = 100`、`quote-style = "single"`）
+- コミット前は `ruff check`・`ruff format --check`・`pyright` を実行する
 
 ## 翻訳プロジェクト
 
