@@ -30,8 +30,10 @@ if [ "$SESSION_COUNT" -gt 1 ]; then
       -e "s/\"customTitle\":\"${SESSION_NAME}\"/\"customTitle\":\"${SESSION_NAME}__cleared_at_${CLEARED_AT}\"/g" \
       "$f"
   done
+  ~/bin/claude-session-compact "$LATEST" "$SESSION_NAME" "$CONF_DIR"
   exec claude --resume "$SESSION_NAME"
 elif [ "$SESSION_COUNT" -eq 1 ]; then
+  ~/bin/claude-session-compact "$SESSION_FILES" "$SESSION_NAME" "$CONF_DIR"
   exec claude --resume "$SESSION_NAME"
 else
   exec claude --name "$SESSION_NAME"

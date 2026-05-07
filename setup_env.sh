@@ -43,8 +43,19 @@ mkdir -p ~/.claude
 mkdir -p ~/.claude-work
 mkdir -p ~/.claude-personal
 mkdir -p ~/.claude/ide
+mkdir -p ~/.claude/projects
 ln -sfn ~/.claude/ide ~/.claude-personal/ide
 ln -sfn ~/.claude/ide ~/.claude-work/ide
+# projectsは個人用と仕事用で分けるのではなく、共通化する
+# すでにフォルダとして存在していたら削除してからシンボリックリンクを貼る
+if [ -d ~/.claude-personal/projects ]; then
+  rm -rf ~/.claude-personal/projects
+fi
+ln -sfn ~/.claude/projects ~/.claude-personal/projects
+if [ -d ~/.claude-work/projects ]; then
+  rm -rf ~/.claude-work/projects
+fi
+ln -sfn ~/.claude/projects ~/.claude-work/projects
 curl -fsSL https://claude.ai/install.sh | bash
 ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude/CLAUDE.md
 ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude-work/CLAUDE.md

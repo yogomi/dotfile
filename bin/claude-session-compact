@@ -1,0 +1,162 @@
+#!/bin/bash
+#
+# 指定されたセッションの最終メッセージから THRESHOLD_HOURS 以上経過していた場合、
+# 会話内容を要約してセッションをコンパクト化する。
+# 元のセッションファイルは $CONF_DIR/session-archive/ にバックアップする。
+#
+# Usage: claude-session-compact <session_file> <session_name> <conf_dir> [threshold_hours]
+
+SESSION_FILE="$1"
+SESSION_NAME="$2"
+CONF_DIR="$3"
+THRESHOLD_HOURS="${4:-5}"
+
+[ -z "$SESSION_FILE" ] || [ ! -f "$SESSION_FILE" ] && exit 0
+
+THRESHOLD_SECS=$((THRESHOLD_HOURS * 3600))
+NOW_EPOCH=$(date +%s)
+
+# 最終タイムスタンプを取得
+LAST_EPOCH=$(SESSION_FILE="$SESSION_FILE" python3 - <<'EOF'
+import json, sys, os
+from datetime import datetime, timezone
+
+with open(os.environ['SESSION_FILE']) as f:
+    lines = f.readlines()
+
+for line in reversed(lines):
+    line = line.strip()
+    if not line:
+        continue
+    try:
+        d = json.loads(line)
+        ts = d.get('timestamp')
+        if ts:
+            dt = datetime.fromisoformat(ts.replace('Z', '+00:00'))
+            print(int(dt.timestamp()))
+            sys.exit(0)
+    except Exception:
+        pass
+print(0)
+EOF
+)
+
+ELAPSED=$((NOW_EPOCH - LAST_EPOCH))
+[ "$ELAPSED" -le "$THRESHOLD_SECS" ] && exit 0
+
+ELAPSED_HOURS=$((ELAPSED / 3600))
+echo "[claude-session-compact] 前回のセッションから ${ELAPSED_HOURS} 時間経過。要約を生成中..." >&2
+
+# 会話テキストを抽出
+CONVERSATION=$(SESSION_FILE="$SESSION_FILE" python3 - <<'EOF'
+import json, sys, os
+
+with open(os.environ['SESSION_FILE']) as f:
+    lines = f.readlines()
+
+messages = []
+for line in lines:
+    line = line.strip()
+    if not line:
+        continue
+    try:
+        d = json.loads(line)
+        if d.get('type') not in ('user', 'assistant'):
+            continue
+        msg = d.get('message', {})
+        role = msg.get('role', d['type'])
+        content = msg.get('content', '')
+        if isinstance(content, list):
+            text = ' '.join(
+                c.get('text', '') for c in content
+                if isinstance(c, dict) and c.get('type') == 'text'
+            )
+        else:
+            text = str(content)
+        text = text.strip()
+        # システム系のメッセージや空メッセージは除外
+        if len(text) < 10:
+            continue
+        messages.append(f'[{role}]: {text[:600]}')
+    except Exception:
+        pass
+
+print('\n\n'.join(messages[:60]))
+EOF
+)
+
+if [ -z "$CONVERSATION" ]; then
+  echo "[claude-session-compact] 会話内容が見つかりませんでした。スキップします。" >&2
+  exit 0
+fi
+
+# Claudeで要約生成
+SUMMARY=$(echo "$CONVERSATION" | claude -p \
+  "以下の会話を日本語で簡潔に要約してください（600字以内）。主なタスク・決定事項・重要な情報・未完了の作業を含めてください。余計な前置きは不要です。" \
+  2>/dev/null)
+
+if [ -z "$SUMMARY" ]; then
+  echo "[claude-session-compact] 要約の生成に失敗しました。セッションをそのまま使用します。" >&2
+  exit 0
+fi
+
+# バックアップ
+ARCHIVE_DIR="$CONF_DIR/session-archive"
+mkdir -p "$ARCHIVE_DIR"
+BACKUP_FILE="$ARCHIVE_DIR/$(basename "${SESSION_FILE%.jsonl}")_$(date +%Y%m%d_%H%M%S).jsonl"
+cp "$SESSION_FILE" "$BACKUP_FILE"
+
+# コンパクト化した新しいJSONLを書き込む
+SESSION_FILE="$SESSION_FILE" SESSION_NAME="$SESSION_NAME" SUMMARY="$SUMMARY" python3 - <<'EOF'
+import json, sys, os
+from datetime import datetime, timezone
+
+session_file = os.environ['SESSION_FILE']
+session_name = os.environ['SESSION_NAME']
+summary      = os.environ['SUMMARY']
+now          = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z')
+
+# 既存ファイルからsessionIdを取得
+session_id = None
+with open(session_file) as f:
+    for line in f:
+        try:
+            d = json.loads(line)
+            if 'sessionId' in d:
+                session_id = d['sessionId']
+                break
+        except Exception:
+            pass
+
+if not session_id:
+    import uuid
+    session_id = str(uuid.uuid4())
+
+lines = [
+    json.dumps({'type': 'custom-title', 'customTitle': session_name, 'sessionId': session_id}, ensure_ascii=False),
+    json.dumps({'type': 'agent-name',   'agentName':   session_name, 'sessionId': session_id}, ensure_ascii=False),
+    json.dumps({
+        'type': 'user',
+        'sessionId': session_id,
+        'timestamp': now,
+        'message': {
+            'role': 'user',
+            'content': f'[前のセッションの要約]\n\n{summary}',
+        },
+    }, ensure_ascii=False),
+    json.dumps({
+        'type': 'assistant',
+        'sessionId': session_id,
+        'timestamp': now,
+        'message': {
+            'role': 'assistant',
+            'content': [{'type': 'text', 'text': '了解しました。前のセッションの内容を踏まえて続けます。'}],
+        },
+    }, ensure_ascii=False),
+]
+
+with open(session_file, 'w') as f:
+    f.write('\n'.join(lines) + '\n')
+EOF
+
+echo "[claude-session-compact] 要約完了。バックアップ: $BACKUP_FILE" >&2
