@@ -7,6 +7,10 @@
 - 回答の末尾に「何かしましょうか？」などの提案を毎回つけないでほしい（本当に有益な場合のみ）。
 - 「資料を書いて」「メモしておいて」「記録しておいて」など、形式の指定がない場合はMarkdownで出力する。
 - Markdownを使う場合はGitHub Flavored Markdownに従う。
+- git commit は明示的に依頼された場合のみ行う。作業の区切りでも自動的にコミットしない。
+- 作業の話題が変わった際、未コミットの変更が残っていると判断した場合は、
+  次の話題に軽く応答した上でコミットのリマインドを行う
+- コミット完了後、必要と感じた場合はリマインド前の作業への誘導を行う
 - ファイルの作成・編集・削除を伴う作業を始める前に、以下の手順を踏むこと：
   1. 変更の目的・対象ファイル・変更内容の概要を説明し、必要であれば議論する
   2. 合意が得られたら「この内容で作業を進めてよいですか？」と一度だけ確認する
@@ -99,6 +103,59 @@
 - `@response` で正常・異常時のレスポンス仕様を記載
 - `@responseExample` で具体的なJSON例（成功・失敗）を示す
 - `@author`、`@date` で作成者と日付を明記
+
+## Webアプリのデプロイ・開発構成
+
+### 構成概要
+
+- フロントエンド: Vite + React（TypeScript）
+- バックエンド: Express + sequelize-typescript
+- ルートに `frontend/` と `backend/` を置き、npm workspaces で管理する
+- ルートの `.gitignore` に `backend/data/` を追加する（SQLiteファイルの除外）
+
+### 開発時
+
+- DBはSQLiteを使い、Dockerなしで起動できるようにする
+- `NODE_ENV` が `production` 以外の場合は SQLite、`production` の場合は PostgreSQL に切り替える
+- SQLiteのファイルパスは `DB_PATH` 環境変数で上書きできるようにする
+
+### 本番デプロイ
+
+- Docker Compose で postgres + backend の2サービス構成にする
+- フロントエンドの `dist` はホスト側でビルドし、バックエンドコンテナに `:ro` でボリュームマウントする
+- 本番時、バックエンドの Express からフロントエンドの静的ファイルを配信する
+- 未マッチのルートは `index.html` にフォールバックする
+- DBデータ・アップロードファイル等の永続化は `/opt/<プロジェクト名>/` 以下にマウントする
+- バックエンドの Dockerfile はマルチステージビルド（node:20-alpine）
+- SQLite のネイティブビルドのため、Dockerfile のビルダーステージに `python3 make g++` を追加する
+- バックエンドに `GET /api/health` エンドポイントを設け、ヘルスチェックに使う
+- `deploy.sh`（初回フルデプロイ）と `update.sh`（git pull → 差分ビルド → 再起動）を用意する
+
+### バックエンドエラーハンドリング
+
+- `AppError` クラスを `backend/src/utils/errors.ts` に定義し、
+  運用エラー（バリデーション失敗など）とプログラムエラー（予期せぬバグ）を区別する
+- グローバルエラーハンドラは `backend/src/middleware/errorHandler.ts` に独立させ、
+  `app.ts` の末尾でミドルウェアとして登録する
+- Sequelizeのエラー（UniqueConstraintError、ConnectionError等）は
+  errorHandler 内で AppError に変換して処理する
+- 運用エラーは `warn`、プログラムエラーは `error` レベルでログを記録する
+
+## 多言語対応
+
+- i18next + react-i18next を使用する
+- 翻訳リソースは `frontend/src/i18n.ts` に言語ごとのオブジェクトとしてまとめる
+- `frontend/src/index.tsx` で `I18nextProvider` をルートに配置する
+- 各コンポーネントでは `useTranslation()` フックで呼び出す
+- 多言語対応が必要なプロジェクトでは明示するので、その都度適用する
+
+## フロントエンド通知（Snackbar）
+
+- グローバルな `SnackbarContext` を `frontend/src/app/SnackbarContext.tsx` に作成する
+- `frontend/src/index.tsx` で `SnackbarProvider` をルートに配置する
+- `useSnackbar()` フックで severity（success / error / warning / info）と
+  message を指定してどこからでも呼び出せるようにする
+- MUIの `Snackbar` + `Alert` を組み合わせて表示する
 
 ## API 設計の好み
 
