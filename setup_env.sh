@@ -63,12 +63,12 @@ ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude-personal/CLAUDE.md
 ln -sf ${PWD}/claude/settings.json ${HOME}/.claude/settings.json
 ln -sf ${PWD}/claude/settings.json ${HOME}/.claude-work/settings.json
 ln -sf ${PWD}/claude/settings.json ${HOME}/.claude-personal/settings.json
-if [ -d ~/.claude/commands ]; then rm -rf ~/.claude/commands; fi
-ln -sfn ${PWD}/claude/commands ~/.claude/commands
-if [ -d ~/.claude-work/commands ]; then rm -rf ~/.claude-work/commands; fi
-ln -sfn ${PWD}/claude/commands ~/.claude-work/commands
-if [ -d ~/.claude-personal/commands ]; then rm -rf ~/.claude-personal/commands; fi
-ln -sfn ${PWD}/claude/commands ~/.claude-personal/commands
+if [ -d ~/.claude/skills ]; then rm -rf ~/.claude/skills; fi
+ln -sfn ${PWD}/claude/skills ~/.claude/skills
+if [ -d ~/.claude-work/skills ]; then rm -rf ~/.claude-work/skills; fi
+ln -sfn ${PWD}/claude/skills ~/.claude-work/skills
+if [ -d ~/.claude-personal/skills ]; then rm -rf ~/.claude-personal/skills; fi
+ln -sfn ${PWD}/claude/skills ~/.claude-personal/skills
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 nvm install --lts

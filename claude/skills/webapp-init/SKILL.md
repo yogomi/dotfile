@@ -1,3 +1,13 @@
+---
+name: webapp-init
+description: Webアプリのプロジェクト雛形を生成する。プロジェクト名と任意のオプション（--i18n, --snackbar）を引数に取る。
+user-invocable: true
+allowed-tools:
+  - Write
+  - Bash(mkdir *)
+  - Bash(chmod *)
+---
+
 Webアプリのプロジェクト雛形を**現在のディレクトリに**生成してください。
 
 引数: $ARGUMENTS
