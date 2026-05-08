@@ -1,2 +1,4 @@
 .vim/plugged/
 nvim-linux-x86_64.tar.gz
+.DS_Store
+**/.DS_Store
