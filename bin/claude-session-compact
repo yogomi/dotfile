@@ -160,3 +160,7 @@ with open(session_file, 'w') as f:
 EOF
 
 echo "[claude-session-compact] 要約完了。バックアップ: $BACKUP_FILE" >&2
+echo ""
+echo "--- 生成された要約 ---"
+echo "$SUMMARY"
+echo "----------------------"
