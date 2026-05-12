@@ -211,6 +211,26 @@
 - 許容遅延：6〜12秒
 - 翻訳ではSentencePieceを使用予定
 
+## 映像・動画処理
+
+### ffmpeg エンコード方針
+
+動画を加工・再エンコードする際は、**元のコーデックを維持する**ことを基本方針とする。
+環境変数 `USE_GPU=true` が設定されている場合は NVIDIA NVENC を使用する。
+
+| 入力コーデック | GPU あり | GPU なし |
+|--------------|---------|---------|
+| hevc (H.265) | `hevc_nvenc` | `libx265` |
+| h264 (H.264) | `h264_nvenc` | `libx264` |
+| av1 | `libsvtav1`（NVENC 非対応） | `libsvtav1` |
+| vp9 | `libvpx-vp9`（NVENC 非対応） | `libvpx-vp9` |
+| vp8 | `libvpx`（NVENC 非対応） | `libvpx` |
+| その他 | `h264_nvenc` | `libx264`（H.264 に変換） |
+
+- Docker 本番環境では `docker-compose.yml` に `USE_GPU=true` と GPU デバイス設定を追加する
+- GPU デバイスの capabilities は `[gpu, video]` が必要（`video` がないと NVENC ライブラリがマウントされない）
+- 開発環境（`npm run dev` 等）では `USE_GPU` 未設定で CPU フォールバックとなり、GPU がなくても動作する
+
 ## AIモデル・解析関連
 
 - 映像からのリアルタイム異常検知に関心あり
