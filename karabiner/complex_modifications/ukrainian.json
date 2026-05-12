@@ -1,0 +1,52 @@
+{
+  "title": "For Ukrainian",
+  "rules": [
+    {
+      "description": "toggle ukrainian with shift + space",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "escape",
+            "modifiers": { "mandatory": "control" }
+          },
+          "conditions": [
+            {
+              "type": "input_source_if",
+              "input_sources": [
+                { "language": "en" },
+                { "language": "jp" }
+              ]
+            }
+          ],
+          "to": [{
+            "select_input_source": { "language": "uk" }
+          }]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "escape",
+            "modifiers": { "mandatory": "control" }
+          },
+          "conditions": [
+            {
+              "type": "input_source_if",
+              "input_sources": [
+                { "language": "en" },
+                { "language": "uk" }
+              ]
+            }
+          ],
+          "to": [{
+            "select_input_source": { "language": "en" }
+          }]
+        }, {
+          "type": "basic",
+          "from": {"key_code": "f13"},
+          "to": [{"select_input_source": {"language": "uk"}}]
+        }
+      ]
+    }
+  ]
+}

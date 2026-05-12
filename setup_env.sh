@@ -73,8 +73,9 @@ nvm install --lts
 if [ "$(uname)" == "Darwin" ]; then
    brew install neovim tmux zsh peco ntfy
    mkdir -p ~/.config/karabiner/assets/complex_modifications
-   ln -sf ${PWD}/karabiner/complex_modifications/ctrl_s_claude.json \
-     ~/.config/karabiner/assets/complex_modifications/ctrl_s_claude.json
+   for f in ${PWD}/karabiner/complex_modifications/*.json; do
+     ln -sf "$f" ~/.config/karabiner/assets/complex_modifications/$(basename "$f")
+   done
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    sudo apt update
    sudo apt install -y tmux zsh xclip

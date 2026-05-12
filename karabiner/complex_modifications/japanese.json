@@ -2,19 +2,20 @@
   "title": "For Japanese",
   "rules": [
     {
-      "description": "toggle eisuu with ctrl + space",
+      "description": "toggle japanese with shift + space",
       "manipulators": [
         {
           "type": "basic",
           "from": {
             "key_code": "spacebar",
-              "modifiers": { "mandatory": "control" }
+            "modifiers": { "mandatory": "control" }
           },
           "conditions": [
             {
               "type": "input_source_if",
               "input_sources": [
-                { "language": "en" }
+                { "language": "en" },
+                { "language": "uk" }
               ]
             }
           ],
@@ -30,7 +31,8 @@
             {
               "type": "input_source_if",
               "input_sources": [
-                { "language": "ja" }
+                { "language": "ja" },
+                { "language": "uk" }
               ]
             }
           ],
