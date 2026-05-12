@@ -32,10 +32,6 @@ mkdir -p ~/.nvimcache/bak/
 mkdir ~/.nvimcache/vimswap/
 mkdir ~/.nvimcache/undo/
 
-rm -rf ${HOME}/.zsh/modules/zsh-context-sensitive-alias
-git clone https://github.com/uasi/zsh-context-sensitive-alias.git
-mv zsh-context-sensitive-alias ${HOME}/.zsh/modules/
-
 mkdir -p ${HOME}/bin
 ln -sf ${PWD}/bin/* ${HOME}/bin
 

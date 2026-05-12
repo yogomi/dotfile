@@ -157,23 +157,6 @@ else
     echo 'no python3'
 fi
 
-source ${HOME}/.zsh/modules/zsh-context-sensitive-alias/csa.zsh
-csa_init
-
-# コンテキストを更新する関数
-function my_context_func {
-	local -a ctx
-	# Git リポジトリの中にいるなら git コンテキストを追加
-	if [[ -n `git rev-parse --git-dir 2> /dev/null` ]]; then
-		ctx+=git
-	fi
-
-	# コンテキストをセット
-	# 同名のエイリアスが複数のコンテキストで定義されている場合、
-	# 配列変数 ctx 内の*より後ろ*にあるコンテキストのエイリアスが優先される
-	csa_set_context $ctx
-}
-
 function groot() {
   if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
     cd `git rev-parse --show-toplevel`
@@ -190,11 +173,7 @@ function vixit() {
   fi
 }
 
-# コンテキストを更新する関数が cd のたびに呼ばれるようにする
-chpwd_functions+=my_context_func
-
-# csalias <context> <alias> <command>
-csalias git sm 'git submodule'
+alias sm='git submodule'
 
 export PATH="$HOME/.rbenv/bin:$PATH:/sbin:/usr/sbin"
 unalias run-help
