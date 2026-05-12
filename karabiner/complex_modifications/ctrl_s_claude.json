@@ -1,0 +1,33 @@
+{
+  "title": "iTerm2: Ctrl+S でEnter送信＋英数入力に切り替え",
+  "rules": [
+    {
+      "description": "iTerm2でCtrl+Sを押すとEnterを送信し、英数入力に切り替える",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "s",
+            "modifiers": {
+              "mandatory": ["control"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return"
+            },
+            {
+              "key_code": "japanese_eisuu"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": ["com.googlecode.iterm2"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
