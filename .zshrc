@@ -126,7 +126,10 @@ linux*)
     ;;
 esac
 
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+case $(uname -m) in
+    aarch64) export PATH="$PATH:/opt/nvim-linux-arm64/bin" ;;
+    x86_64)  export PATH="$PATH:/opt/nvim-linux-x86_64/bin" ;;
+esac
 if which nvim > /dev/null; then
     echo 'use nvim as vim'
     alias vim=nvim
@@ -228,7 +231,9 @@ export PATH=${HOME}/workspace/sdk/google-cloud-sdk/bin:${PATH}
 export PATH=${HOME}/workspace/sdk/flutter/bin:${PATH}
 
 # aws
-source ~/.zsh/aws.zsh
+if which aws_completer > /dev/null 2>&1; then
+    source ~/.zsh/aws.zsh
+fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 

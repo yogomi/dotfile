@@ -40,12 +40,12 @@
     "lua-lsp@claude-plugins-official": true
   },
   "language": "Japanese",
+  "tui": "default",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "voiceEnabled": true,
-  "tui": "default"
+  "voiceEnabled": true
 }

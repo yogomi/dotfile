@@ -79,15 +79,27 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    sudo apt update
    sudo apt install -y tmux zsh xclip
-   curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-   sudo rm -rf /opt/nvim-linux-x86_64
-   sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+   ARCH=$(uname -m)
+   if [ "${ARCH}" == "aarch64" ]; then
+       curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
+       sudo rm -rf /opt/nvim-linux-arm64
+       sudo tar -C /opt -xzf nvim-linux-arm64.tar.gz
+   else
+       curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+       sudo rm -rf /opt/nvim-linux-x86_64
+       sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+   fi
 
    # aptにも存在するが、文字化けする。
    # 公式から直接入れたほうが良い
-   wget https://github.com/peco/peco/releases/download/v0.5.11/peco_linux_amd64.tar.gz
-   tar -xzf peco_linux_amd64.tar.gz
-   sudo mv peco_linux_amd64/peco /usr/local/bin
+   if [ "${ARCH}" == "aarch64" ]; then
+       wget https://github.com/peco/peco/releases/download/v0.6.0/peco_0.6.0_linux_arm64.tar.gz
+       tar -xzf peco_0.6.0_linux_arm64.tar.gz
+   else
+       wget https://github.com/peco/peco/releases/download/v0.6.0/peco_0.6.0_linux_amd64.tar.gz
+       tar -xzf peco_0.6.0_linux_amd64.tar.gz
+   fi
+   sudo mv peco /usr/local/bin
 fi
 
 NEOVIM_SETTINGS_DIR=${HOME}/.config/nvim
