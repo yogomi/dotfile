@@ -73,6 +73,13 @@ ln -sfn ${PWD}/claude/docs ~/.claude-work/docs
 if [ -d ~/.claude-personal/docs ]; then rm -rf ~/.claude-personal/docs; fi
 ln -sfn ${PWD}/claude/docs ~/.claude-personal/docs
 
+if [ -d ~/.claude/rules ]; then rm -rf ~/.claude/rules; fi
+ln -sfn ${PWD}/claude/rules ~/.claude/rules
+if [ -d ~/.claude-work/rules ]; then rm -rf ~/.claude-work/rules; fi
+ln -sfn ${PWD}/claude/rules ~/.claude-work/rules
+if [ -d ~/.claude-personal/rules ]; then rm -rf ~/.claude-personal/rules; fi
+ln -sfn ${PWD}/claude/rules ~/.claude-personal/rules
+
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 nvm install --lts
 
