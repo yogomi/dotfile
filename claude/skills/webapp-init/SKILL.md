@@ -55,6 +55,10 @@ Webアプリのプロジェクト雛形を**現在のディレクトリに**生�
 │   └── src/
 │       ├── index.ts
 │       ├── db.ts                    # --db のときのみ
+│       ├── lib/
+│       │   └── migrator.ts          # --db のときのみ
+│       ├── migrations/              # --db のときのみ
+│       │   └── 001-init.ts
 │       ├── middleware/
 │       │   ├── errorHandler.ts
 │       │   └── rateLimiter.ts       # --rate-limit のときのみ
@@ -83,8 +87,8 @@ FRONTEND_PATH=../frontend/dist
 LOG_DIR=./backend/logs
 LOG_LEVEL=debug
 
-# --db のときのみ
-DB_PATH=./backend/data/dev.sqlite
+# --db のときのみ（DB_PATH は省略時 backend/ 起動ディレクトリ基準のデフォルト値を使う）
+# DB_PATH=./data/dev.sqlite
 DATABASE_URL=postgres://user:pass@localhost:5432/dbname
 ```
 
@@ -180,7 +184,7 @@ MUI のデフォルトテーマをベースにした `createTheme()` のエク�
 - `winston`
 - `dotenv`, `zod`
 - `@types/node`（本番でも使用）
-- `--db` の場合: `sequelize`, `sequelize-typescript`, `reflect-metadata`, `pg`, `pg-hstore`
+- `--db` の場合: `sequelize`, `sequelize-typescript`, `reflect-metadata`, `pg`, `pg-hstore`, `umzug`
 - `--helmet` の場合: `helmet`
 - `--compression` の場合: `compression`
 - `--rate-limit` の場合: `express-rate-limit`
@@ -282,15 +286,64 @@ dotenv.config({ path: '../.env' });
     - `SIGTERM` / `SIGINT`: `server.close()` → DB 接続クローズ → `process.exit(0)`（30 秒タイムアウトで強制終了）
     - `uncaughtException` / `unhandledRejection`: ログ記録後に graceful shutdown
 12. 起動処理:
-    - `--db` あり: `sequelize.authenticate()` 成功後に `app.listen(PORT)`
+    - `--db` あり: `sequelize.authenticate()` → `migrator.up()` → `app.listen(PORT)`
     - `--db` なし: 直接 `app.listen(PORT)`
     - デフォルト PORT は `3001`
 
 ### `backend/src/db.ts`（`--db` のときのみ）
 
-- `NODE_ENV !== 'production'`: SQLite（`DB_PATH` 環境変数でパス上書き可能、デフォルト `../data/dev.sqlite`）
+- `NODE_ENV !== 'production'`: SQLite（`DB_PATH` 環境変数でパス上書き可能、デフォルト `path.join(__dirname, '../../data/dev.sqlite')`）
 - `production`: PostgreSQL（`DATABASE_URL` 環境変数）
 - `sequelize-typescript` で初期化して export
+- `sequelize.sync()` は呼ばない（マイグレーションで管理するため）
+- モデルはグロブパスではなくクラスを直接配列で渡す（`models: [User, Group, ...]`）
+
+### `backend/src/lib/migrator.ts`（`--db` のときのみ）
+
+`umzug` + `SequelizeStorage` でマイグレーターを生成して export する。
+
+```ts
+import path from 'path';
+import { QueryInterface, Sequelize } from 'sequelize';
+import { SequelizeStorage, Umzug } from 'umzug';
+
+export function createMigrator(sequelize: Sequelize): Umzug<QueryInterface> {
+  return new Umzug({
+    migrations: {
+      glob: path.resolve(__dirname, '../migrations/*.{ts,js}'),
+      resolve: ({ name, path: migPath, context }) => {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const migration = require(migPath!);
+        return {
+          name,
+          up: async () => migration.up({ context }),
+          down: async () => migration.down({ context }),
+        };
+      },
+    },
+    context: sequelize.getQueryInterface(),
+    storage: new SequelizeStorage({ sequelize }),
+    logger: console,
+  });
+}
+```
+
+### `backend/src/migrations/001-init.ts`（`--db` のときのみ）
+
+すべてのテーブル初期化を1ファイルにまとめる。
+以降のスキーマ変更は `002-xxx.ts` のように連番で追加していく。
+
+```ts
+import { DataTypes, QueryInterface } from 'sequelize';
+
+export async function up({ context: qi }: { context: QueryInterface }): Promise<void> {
+  // テーブルを FK 依存順に作成
+}
+
+export async function down({ context: qi }: { context: QueryInterface }): Promise<void> {
+  // テーブルを逆順に削除
+}
+```
 
 ### `docker-compose.yml`
 

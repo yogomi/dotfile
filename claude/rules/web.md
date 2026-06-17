@@ -36,6 +36,15 @@
 - `NODE_ENV` が `production` 以外の場合は SQLite、`production` の場合は PostgreSQL に切り替える
 - SQLiteのファイルパスは `DB_PATH` 環境変数で上書きできるようにする
 
+### DBマイグレーション
+
+- `sequelize.sync()` は使わない。代わりに `umzug` + `SequelizeStorage` でマイグレーション管理する
+- マイグレーションファイルは `backend/src/migrations/` に置く
+- ファイル命名は `001-init.ts`、`002-xxx.ts` のように連番プレフィックスを付ける
+- `001-init.ts` にすべてのテーブル初期化をまとめる。以降のスキーマ変更は差分ファイルを追加していく
+- マイグレーターは `backend/src/lib/migrator.ts` に定義し、サーバー起動時に `migrator.up()` を呼ぶ
+- `up` / `down` の両方を実装する（`down` はテーブル削除またはカラム削除）
+
 ### 本番デプロイ
 
 - Docker Compose で postgres + backend の2サービス構成にする

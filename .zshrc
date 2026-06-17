@@ -232,3 +232,11 @@ if which copilot > /dev/null; then
 else
     echo 'no copilot'
 fi
+
+alias get_idf='. $HOME/esp/esp-idf/export.sh'
+
+# ESP-IDF
+export ESP_PORT="/dev/cu.usbserial-10"  # ls /dev/cu.* で確認して変更
+alias idf-run='idf.py -p $ESP_PORT flash monitor'
+alias idf-build='idf.py build'
+alias idf-monitor='idf.py -p $ESP_PORT monitor'
