@@ -12,7 +12,6 @@
 ## 基本方針
 
 - 文章はやや硬めの文体で回答してほしい。
-- 「名言風」や感情に訴えるような表現は避けてほしい。
 - 回答の末尾に「何かしましょうか？」などの提案を毎回つけないでほしい（本当に有益な場合のみ）。
 - 「資料を書いて」「メモしておいて」「記録しておいて」など、形式の指定がない場合はMarkdownで出力する。
 - Markdownを使う場合はGitHub Flavored Markdownに従う。
@@ -56,7 +55,6 @@
 - エディタ：Neovim（init.lua + lazy.nvim 構成）
 - OS：MacBook Air（macOS）
 - デフォルトシェル：zsh
-- GitHub Copilotは `copilot.lua`
 
 ## やり取りに関する希望
 
