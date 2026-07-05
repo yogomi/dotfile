@@ -52,7 +52,10 @@ if [ -d ~/.claude-work/projects ]; then
   rm -rf ~/.claude-work/projects
 fi
 ln -sfn ~/.claude/projects ~/.claude-work/projects
-curl -fsSL https://claude.ai/install.sh | bash
+# Claude Codeは未インストールの場合のみインストールする
+if ! command -v claude >/dev/null 2>&1; then
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
 ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude/CLAUDE.md
 ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude-work/CLAUDE.md
 ln -sf ${PWD}/claude/CLAUDE.md ${HOME}/.claude-personal/CLAUDE.md
@@ -79,6 +82,13 @@ if [ -d ~/.claude-work/rules ]; then rm -rf ~/.claude-work/rules; fi
 ln -sfn ${PWD}/claude/rules ~/.claude-work/rules
 if [ -d ~/.claude-personal/rules ]; then rm -rf ~/.claude-personal/rules; fi
 ln -sfn ${PWD}/claude/rules ~/.claude-personal/rules
+
+if [ -d ~/.claude/agents ]; then rm -rf ~/.claude/agents; fi
+ln -sfn ${PWD}/claude/agents ~/.claude/agents
+if [ -d ~/.claude-work/agents ]; then rm -rf ~/.claude-work/agents; fi
+ln -sfn ${PWD}/claude/agents ~/.claude-work/agents
+if [ -d ~/.claude-personal/agents ]; then rm -rf ~/.claude-personal/agents; fi
+ln -sfn ${PWD}/claude/agents ~/.claude-personal/agents
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 nvm install --lts

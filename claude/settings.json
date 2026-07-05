@@ -47,6 +47,5 @@
     "mode": "hold"
   },
   "theme": "dark-ansi",
-  "editorMode": "vim",
-  "voiceEnabled": true
+  "editorMode": "vim"
 }
