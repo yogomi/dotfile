@@ -1,7 +1,13 @@
 #!/bin/bash
 #
 # gitリポジトリ内でclaudeを起動する際、プロジェクトルート名をセッション名として使う。
-# 同名セッションが既にあれば resume、なければ新規作成する。
+# 直近のセッションがTHRESHOLD_HOURS時間以内ならresumeし、それ以外は要約を生成してから
+# 新規セッションを開始する。
+#
+# セッションの状態は $HOME/.claude/project-sessions/ 配下の自前ファイルで管理する。
+# projectsディレクトリとは異なり、個人用・仕事用のCLAUDE_CONFIG_DIRに関わらず共通の
+# 場所を使う（どちらのプロファイルで起動しても同じ状態を参照できるようにするため）。
+# transcript（*.jsonl）は読み取るだけで、書き込み・書き換えは一切行わない。
 
 GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 
@@ -13,28 +19,73 @@ SESSION_NAME=$(basename "$GIT_ROOT")
 PROJECT_KEY=$(echo "$GIT_ROOT" | sed 's/[^a-zA-Z0-9]/-/g')
 CONF_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 PROJECT_DIR="$CONF_DIR/projects/$PROJECT_KEY"
+THRESHOLD_HOURS=5
 
 cd "$GIT_ROOT" || exec claude
 
-SESSION_FILES=$(grep -El \
-  "\"agentName\":\"${SESSION_NAME}\"|\"customTitle\":\"${SESSION_NAME}\"" \
-  "$PROJECT_DIR"/*.jsonl 2>/dev/null)
-SESSION_COUNT=$(echo "$SESSION_FILES" | grep -c . 2>/dev/null)
+STATE_DIR="$HOME/.claude/project-sessions"
+STATE_FILE="$STATE_DIR/${PROJECT_KEY}.json"
+SUMMARY_FILE="$STATE_DIR/${PROJECT_KEY}.summary.md"
+PENDING_FILE="$STATE_DIR/${PROJECT_KEY}.pending.md"
 
-if [ "$SESSION_COUNT" -gt 1 ]; then
-  LATEST=$(echo "$SESSION_FILES" | xargs ls -t | head -1)
-  CLEARED_AT=$(date +%Y%m%d_%H%M%S)
-  echo "$SESSION_FILES" | grep -v "^$LATEST$" | while read -r f; do
-    sed -i '' \
-      -e "s/\"agentName\":\"${SESSION_NAME}\"/\"agentName\":\"${SESSION_NAME}__cleared_at_${CLEARED_AT}\"/g" \
-      -e "s/\"customTitle\":\"${SESSION_NAME}\"/\"customTitle\":\"${SESSION_NAME}__cleared_at_${CLEARED_AT}\"/g" \
-      "$f"
-  done
-  ~/bin/claude-session-compact "$LATEST" "$SESSION_NAME" "$CONF_DIR"
-  exec claude --resume "$SESSION_NAME"
-elif [ "$SESSION_COUNT" -eq 1 ]; then
-  ~/bin/claude-session-compact "$SESSION_FILES" "$SESSION_NAME" "$CONF_DIR"
-  exec claude --resume "$SESSION_NAME"
-else
+mkdir -p "$STATE_DIR"
+
+SESSION_ID=""
+TRANSCRIPT=""
+ENDED_AT=0
+
+if [ -f "$STATE_FILE" ]; then
+  STATE_INFO=$(STATE_FILE="$STATE_FILE" python3 - <<'EOF'
+import json, os
+
+# 状態ファイルが破損していても起動を止めない（空扱いにしてフォールバックへ）
+try:
+    with open(os.environ['STATE_FILE']) as f:
+        d = json.load(f)
+except Exception:
+    d = {}
+
+print(d.get('session_id') or '')
+print(d.get('transcript_path') or '')
+print(d.get('ended_at') or 0)
+EOF
+)
+  SESSION_ID=$(echo "$STATE_INFO" | sed -n '1p')
+  TRANSCRIPT=$(echo "$STATE_INFO" | sed -n '2p')
+  ENDED_AT=$(echo "$STATE_INFO" | sed -n '3p')
+fi
+
+# 状態ファイルがない場合の移行用フォールバック：最新のtranscriptから推定する
+if [ -z "$SESSION_ID" ]; then
+  LATEST=$(ls -t "$PROJECT_DIR"/*.jsonl 2>/dev/null | head -1)
+  if [ -n "$LATEST" ]; then
+    TRANSCRIPT="$LATEST"
+    SESSION_ID=$(basename "$LATEST" .jsonl)
+    ENDED_AT=$(date -r "$LATEST" +%s)
+  fi
+fi
+
+# resume判定はsession_idで行う。transcriptは要約の入力にだけ使うため、
+# 実在しない場合はクリアして要約をスキップする
+if [ -n "$TRANSCRIPT" ] && [ ! -f "$TRANSCRIPT" ]; then
+  TRANSCRIPT=""
+fi
+
+if [ -z "$SESSION_ID" ]; then
   exec claude --name "$SESSION_NAME"
 fi
+
+NOW_EPOCH=$(date +%s)
+ELAPSED=$((NOW_EPOCH - ENDED_AT))
+THRESHOLD_SECS=$((THRESHOLD_HOURS * 3600))
+
+if [ "$ELAPSED" -le "$THRESHOLD_SECS" ]; then
+  exec claude --resume "$SESSION_ID"
+fi
+
+# 閾値超過：要約を生成してからセッション名を再利用して新規起動する（失敗しても続行）
+if [ -n "$TRANSCRIPT" ]; then
+  ~/bin/claude-session-summary "$TRANSCRIPT" "$SUMMARY_FILE" "$PENDING_FILE"
+fi
+
+exec claude --name "$SESSION_NAME"
