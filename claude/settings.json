@@ -1,5 +1,35 @@
 {
   "model": "claude-fable-5[1m]",
+  "permissions": {
+    "allow": [
+      "Read(//Users/yan/workspace/**)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:zenn.dev)",
+      "WebFetch(domain:developers.google.com)",
+      "Bash(npm run lint *)",
+      "Bash(npm run typecheck *)",
+      "Bash(ruff check *)",
+      "Bash(ruff format --check *)",
+      "Bash(brew list *)",
+      "Bash(pyenv versions *)"
+    ],
+    "ask": [
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ],
+    "deny": [
+      "Read(//**/keys/**)",
+      "Read(//**/.ssh/**)",
+      "Bash(git add -A)",
+      "Bash(git add -A *)",
+      "Bash(git add --all)",
+      "Bash(git add --all *)",
+      "Bash(git add .)",
+      "Bash(git add . *)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
