@@ -4,6 +4,11 @@
 # 一度注入したpendingファイルはconsume-onceで削除する。stdinにはcwd, session_id, source等の
 # JSONが渡される。常に高速に終わることを優先し、重い処理は行わない。
 
+# claude-project --solo で起動したセッションはプロジェクトに紐付けないため注入しない
+if [ -n "${CLAUDE_PROJECT_SOLO:-}" ]; then
+  exit 0
+fi
+
 INPUT=$(cat)
 
 CWD=$(printf '%s' "$INPUT" | python3 -c "

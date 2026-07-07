@@ -8,11 +8,31 @@
 # projectsディレクトリとは異なり、個人用・仕事用のCLAUDE_CONFIG_DIRに関わらず共通の
 # 場所を使う（どちらのプロファイルで起動しても同じ状態を参照できるようにするため）。
 # transcript（*.jsonl）は読み取るだけで、書き込み・書き換えは一切行わない。
+#
+# --solo を付けるとgitリポジトリ内でもプロジェクトに紐付けず、resume・要約注入・
+# セッション名なしの独立したセッションとして起動する。--solo 以外の引数はclaudeへ
+# そのまま渡す。
+
+SOLO=""
+ARGS=()
+for arg in "$@"; do
+  if [ "$arg" = "--solo" ]; then
+    SOLO=1
+  else
+    ARGS+=("$arg")
+  fi
+done
+
+if [ -n "$SOLO" ]; then
+  # SessionStart/SessionEndフックがこの環境変数を見て、要約注入と状態記録をスキップする
+  export CLAUDE_PROJECT_SOLO=1
+  exec claude "${ARGS[@]}"
+fi
 
 GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 
 if [ -z "$GIT_ROOT" ]; then
-  exec claude
+  exec claude "${ARGS[@]}"
 fi
 
 SESSION_NAME=$(basename "$GIT_ROOT")
@@ -21,7 +41,7 @@ CONF_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 PROJECT_DIR="$CONF_DIR/projects/$PROJECT_KEY"
 THRESHOLD_HOURS=5
 
-cd "$GIT_ROOT" || exec claude
+cd "$GIT_ROOT" || exec claude "${ARGS[@]}"
 
 STATE_DIR="$HOME/.claude/project-sessions"
 STATE_FILE="$STATE_DIR/${PROJECT_KEY}.json"
@@ -81,7 +101,7 @@ else
 fi
 
 if [ -z "$SESSION_ID" ]; then
-  exec claude --name "$SESSION_NAME"
+  exec claude --name "$SESSION_NAME" "${ARGS[@]}"
 fi
 
 NOW_EPOCH=$(date +%s)
@@ -122,9 +142,9 @@ EOF
 )
   if [ "$RUNNING" = "running" ]; then
     # 稼働中セッションと名前が衝突するため --name は付けずに新規起動する
-    exec claude
+    exec claude "${ARGS[@]}"
   fi
-  exec claude --resume "$SESSION_ID"
+  exec claude --resume "$SESSION_ID" "${ARGS[@]}"
 fi
 
 # 閾値超過またはresume不可：要約を生成してからセッション名を再利用して新規起動する
@@ -133,4 +153,4 @@ if [ -n "$TRANSCRIPT" ]; then
   ~/bin/claude-session-summary "$TRANSCRIPT" "$SUMMARY_FILE" "$PENDING_FILE"
 fi
 
-exec claude --name "$SESSION_NAME"
+exec claude --name "$SESSION_NAME" "${ARGS[@]}"

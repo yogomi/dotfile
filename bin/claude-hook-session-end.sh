@@ -5,6 +5,11 @@
 # 次回起動時、bin/claude-project がこの状態ファイルを読んでresume判定に使う。
 # stdinにはsession_id, transcript_path, cwd, reason等のJSONが渡される。
 
+# claude-project --solo で起動したセッションはプロジェクトに紐付けないため記録しない
+if [ -n "${CLAUDE_PROJECT_SOLO:-}" ]; then
+  exit 0
+fi
+
 INPUT=$(cat)
 
 CWD=$(printf '%s' "$INPUT" | python3 -c "
