@@ -80,6 +80,41 @@ ELAPSED=$((NOW_EPOCH - ENDED_AT))
 THRESHOLD_SECS=$((THRESHOLD_HOURS * 3600))
 
 if [ "$ELAPSED" -le "$THRESHOLD_SECS" ]; then
+  # 対象セッションが別プロセスで稼働中なら resume しない。稼働中セッションを
+  # resumeすると「No conversation found」で起動自体が失敗するため。
+  # 各プロファイルの sessions/*.json（実行中セッションの記録。pid, sessionId を持つ）を
+  # 走査し、sessionId が一致してその PID が生存していれば稼働中と判定する
+  RUNNING=$(SESSION_ID="$SESSION_ID" python3 - <<'EOF'
+import glob, json, os
+
+sid = os.environ['SESSION_ID']
+home = os.path.expanduser('~')
+for profile in ('.claude', '.claude-work', '.claude-personal'):
+    for path in glob.glob(os.path.join(home, profile, 'sessions', '*.json')):
+        try:
+            with open(path) as f:
+                d = json.load(f)
+        except Exception:
+            continue
+        if d.get('sessionId') != sid:
+            continue
+        pid = d.get('pid')
+        if not isinstance(pid, int):
+            continue
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            continue
+        except OSError:
+            pass
+        print('running')
+        raise SystemExit(0)
+EOF
+)
+  if [ "$RUNNING" = "running" ]; then
+    # 稼働中セッションと名前が衝突するため --name は付けずに新規起動する
+    exec claude
+  fi
   exec claude --resume "$SESSION_ID"
 fi
 
