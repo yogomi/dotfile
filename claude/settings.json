@@ -2,7 +2,7 @@
   "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
-    "command": "ccusage statusline"
+    "command": "~/bin/claude-statusline.sh"
   },
   "permissions": {
     "allow": [

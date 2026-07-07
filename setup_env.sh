@@ -92,19 +92,18 @@ ln -sfn ${PWD}/claude/agents ~/.claude-personal/agents
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 nvm install --lts
-# Claude Codeのstatus line（settings.jsonのstatusLine）で使用する
-npm install -g ccusage
 
 # Macだったらbrewで、Linuxだったらaptで必要なものを入れる
+# jqはClaude Codeのstatus line（bin/claude-statusline.sh）で使用する
 if [ "$(uname)" == "Darwin" ]; then
-   brew install neovim tmux zsh peco ntfy
+   brew install neovim tmux zsh peco ntfy jq
    mkdir -p ~/.config/karabiner/assets/complex_modifications
    for f in ${PWD}/karabiner/complex_modifications/*.json; do
      ln -sf "$f" ~/.config/karabiner/assets/complex_modifications/$(basename "$f")
    done
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    sudo apt update
-   sudo apt install -y tmux zsh xclip
+   sudo apt install -y tmux zsh xclip jq
    ARCH=$(uname -m)
    if [ "${ARCH}" == "aarch64" ]; then
        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
