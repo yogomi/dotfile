@@ -118,14 +118,18 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 
    # aptにも存在するが、文字化けする。
    # 公式から直接入れたほうが良い
+   # 展開物（Changes等）がカレントディレクトリに残らないよう一時ディレクトリで作業する
+   PECO_TMP=$(mktemp -d)
+   PECO_URL_BASE="https://github.com/peco/peco/releases/download/v0.6.0"
    if [ "${ARCH}" == "aarch64" ]; then
-       wget https://github.com/peco/peco/releases/download/v0.6.0/peco_0.6.0_linux_arm64.tar.gz
-       tar -xzf peco_0.6.0_linux_arm64.tar.gz
+       PECO_TAR="peco_0.6.0_linux_arm64.tar.gz"
    else
-       wget https://github.com/peco/peco/releases/download/v0.6.0/peco_0.6.0_linux_amd64.tar.gz
-       tar -xzf peco_0.6.0_linux_amd64.tar.gz
+       PECO_TAR="peco_0.6.0_linux_amd64.tar.gz"
    fi
-   sudo mv peco /usr/local/bin
+   wget -P ${PECO_TMP} ${PECO_URL_BASE}/${PECO_TAR}
+   tar -xzf ${PECO_TMP}/${PECO_TAR} -C ${PECO_TMP}
+   sudo mv ${PECO_TMP}/peco /usr/local/bin
+   rm -rf ${PECO_TMP}
 fi
 
 NEOVIM_SETTINGS_DIR=${HOME}/.config/nvim
