@@ -65,9 +65,18 @@ if [ -z "$SESSION_ID" ]; then
   fi
 fi
 
-# resume判定はsession_idで行う。transcriptは要約の入力にだけ使うため、
-# 実在しない場合はクリアして要約をスキップする
-if [ -n "$TRANSCRIPT" ] && [ ! -f "$TRANSCRIPT" ]; then
+# --resume は現在のCLAUDE_CONFIG_DIR内のセッションしか探せない。状態ファイルは
+# プロファイル間で共有されるため、transcriptが現在のプロファイルのprojects/配下に
+# 実在する場合のみresume可能と判定する。それ以外（別プロファイルのセッションや、
+# 起動失敗などでtranscriptが残っていないセッション）をresumeすると
+# 「No conversation found」で起動自体が失敗する
+RESUMABLE=""
+if [ -n "$TRANSCRIPT" ] && [ -f "$TRANSCRIPT" ]; then
+  case "$TRANSCRIPT" in
+    "$CONF_DIR/projects/"*) RESUMABLE=1 ;;
+  esac
+else
+  # transcriptは要約の入力にも使うため、実在しない場合はクリアして要約をスキップする
   TRANSCRIPT=""
 fi
 
@@ -79,7 +88,7 @@ NOW_EPOCH=$(date +%s)
 ELAPSED=$((NOW_EPOCH - ENDED_AT))
 THRESHOLD_SECS=$((THRESHOLD_HOURS * 3600))
 
-if [ "$ELAPSED" -le "$THRESHOLD_SECS" ]; then
+if [ -n "$RESUMABLE" ] && [ "$ELAPSED" -le "$THRESHOLD_SECS" ]; then
   # 対象セッションが別プロセスで稼働中なら resume しない。稼働中セッションを
   # resumeすると「No conversation found」で起動自体が失敗するため。
   # 各プロファイルの sessions/*.json（実行中セッションの記録。pid, sessionId を持つ）を
@@ -118,7 +127,8 @@ EOF
   exec claude --resume "$SESSION_ID"
 fi
 
-# 閾値超過：要約を生成してからセッション名を再利用して新規起動する（失敗しても続行）
+# 閾値超過またはresume不可：要約を生成してからセッション名を再利用して新規起動する
+# （要約生成はtranscriptを直接読むだけなので別プロファイルのものでもよい。失敗しても続行）
 if [ -n "$TRANSCRIPT" ]; then
   ~/bin/claude-session-summary "$TRANSCRIPT" "$SUMMARY_FILE" "$PENDING_FILE"
 fi

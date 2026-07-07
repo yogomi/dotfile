@@ -45,9 +45,17 @@ except Exception:
 if d.get('reason') == 'clear':
     raise SystemExit(0)
 
+# transcriptが実在しないセッションは記録しない。resumeに失敗した起動や
+# メッセージ交換前に終了したセッションでもSessionEndは発火するため、
+# そのまま記録すると存在しないsession_idで状態ファイルを汚染し、
+# 以降の起動が「No conversation found」で失敗し続けるループに陥る
+transcript = d.get('transcript_path')
+if not transcript or not os.path.exists(transcript):
+    raise SystemExit(0)
+
 state = {
     'session_id': d.get('session_id'),
-    'transcript_path': d.get('transcript_path'),
+    'transcript_path': transcript,
     'ended_at': int(time.time()),
 }
 
