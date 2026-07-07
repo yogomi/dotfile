@@ -92,6 +92,8 @@ ln -sfn ${PWD}/claude/agents ~/.claude-personal/agents
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 nvm install --lts
+# Claude Codeのstatus line（settings.jsonのstatusLine）で使用する
+npm install -g ccusage
 
 # Macだったらbrewで、Linuxだったらaptで必要なものを入れる
 if [ "$(uname)" == "Darwin" ]; then

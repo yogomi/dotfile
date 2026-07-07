@@ -1,5 +1,9 @@
 {
   "model": "claude-fable-5[1m]",
+  "statusLine": {
+    "type": "command",
+    "command": "ccusage statusline"
+  },
   "permissions": {
     "allow": [
       "Read(//Users/yan/workspace/**)",
