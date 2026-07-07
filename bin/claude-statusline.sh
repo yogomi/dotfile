@@ -23,6 +23,40 @@ IFS=$'\t' read -r model ctx used5 reset5 used7 reset7 <<< "$(
   ] | @tsv' <<< "$input"
 )"
 
+# レートリミットはアカウント（プロファイル）単位の値なので、入力にあればキャッシュを更新し、
+# なければ（セッション初回のAPI応答前）前回値で補完する。キャッシュ由来の値は実測でないことを
+# 示すため % の後ろに * を付ける。リセット時刻を過ぎた枠は使用率が変わっているため表示しない
+CACHE_FILE="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/statusline-cache.json"
+mark=''
+if [ "$used5" != "null" ] || [ "$used7" != "null" ]; then
+  if jq -c '.rate_limits' <<< "$input" > "${CACHE_FILE}.tmp" 2>/dev/null; then
+    mv "${CACHE_FILE}.tmp" "$CACHE_FILE"
+  else
+    rm -f "${CACHE_FILE}.tmp"
+  fi
+elif [ -f "$CACHE_FILE" ]; then
+  IFS=$'\t' read -r used5 reset5 used7 reset7 <<< "$(
+    jq -r '[
+      (.five_hour.used_percentage // "null"),
+      (.five_hour.resets_at // "null"),
+      (.seven_day.used_percentage // "null"),
+      (.seven_day.resets_at // "null")
+    ] | @tsv' "$CACHE_FILE" 2>/dev/null
+  )"
+  used5=${used5:-null}
+  reset5=${reset5:-null}
+  used7=${used7:-null}
+  reset7=${reset7:-null}
+  mark='*'
+  now=$(date +%s)
+  if [ "$reset5" = "null" ] || awk -v r="$reset5" -v n="$now" 'BEGIN { exit !(r <= n) }'; then
+    used5=null
+  fi
+  if [ "$reset7" = "null" ] || awk -v r="$reset7" -v n="$now" 'BEGIN { exit !(r <= n) }'; then
+    used7=null
+  fi
+fi
+
 RESET=$'\033[0m'
 
 # 使用率(%)から使用量バー（8 セグメント・色付き）と使用済み% の文字列を作る
@@ -53,14 +87,14 @@ if [ "$ctx" != "null" ]; then
 fi
 
 if [ "$used5" != "null" ]; then
-  line+=" | 5h $(render_gauge "$used5")"
+  line+=" | 5h $(render_gauge "$used5")$mark"
   if [ "$reset5" != "null" ]; then
     line+=" (〜$(date -r "$reset5" +%H:%M))"
   fi
 fi
 
 if [ "$used7" != "null" ]; then
-  line+=" | 週 $(render_gauge "$used7")"
+  line+=" | 週 $(render_gauge "$used7")$mark"
   if [ "$reset7" != "null" ]; then
     secs=$(( reset7 - $(date +%s) ))
     if [ "$secs" -lt 0 ]; then secs=0; fi
