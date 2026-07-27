@@ -1,2 +1,3 @@
 #!/bin/bash
-CLAUDE_CONFIG_DIR=~/.claude-personal exec ~/bin/claude-project
+# personalプロファイルはモデル指定なし。共有settings.jsonの model（opus）に従う
+CLAUDE_CONFIG_DIR=~/.claude-personal exec ~/bin/claude-project "$@"

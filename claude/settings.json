@@ -29,7 +29,7 @@
       "Bash(git push *)"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus",
   "hooks": {
     "PostToolUse": [
       {
@@ -60,28 +60,6 @@
           {
             "type": "command",
             "command": "~/bin/notify-sound-permission.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/bin/claude-hook-session-start.sh"
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/bin/claude-hook-session-end.sh"
           }
         ]
       }
