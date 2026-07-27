@@ -23,6 +23,13 @@ IFS=$'\t' read -r model ctx used5 reset5 used7 reset7 <<< "$(
   ] | @tsv' <<< "$input"
 )"
 
+# TODO: resets_at表示不具合の調査用デバッグログ。原因特定後に削除する
+DEBUG_LOG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/statusline-debug.log"
+printf '%s\trate_limits=%s\n' \
+  "$(date '+%Y-%m-%dT%H:%M:%S')" \
+  "$(jq -c '.rate_limits // "absent"' <<< "$input")" \
+  >> "$DEBUG_LOG" 2>&1
+
 # レートリミットはアカウント（プロファイル）単位の値なので、入力にあればキャッシュを更新し、
 # なければ（セッション初回のAPI応答前）前回値で補完する。キャッシュ由来の値は実測でないことを
 # 示すため % の後ろに * を付ける。リセット時刻を過ぎた枠は使用率が変わっているため表示しない
