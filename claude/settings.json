@@ -29,7 +29,6 @@
       "Bash(git push *)"
     ]
   },
-  "model": "opus",
   "hooks": {
     "PostToolUse": [
       {
@@ -72,7 +71,8 @@
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true
+    "lua-lsp@claude-plugins-official": true,
+    "clangd-lsp@claude-plugins-official": true
   },
   "language": "Japanese",
   "tui": "default",
@@ -81,5 +81,29 @@
     "mode": "hold"
   },
   "theme": "dark-ansi",
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Org-specific CLIs**: None configured",
+      "commit and push only when explicitly requested by the user (per ~/.claude/CLAUDE.md: 絶対禁止事項 — do not self-propose commit/push); never use `git add -A` or `git add .`, always stage files by explicit name"
+    ]
+  },
+  "model": "opus"
 }
