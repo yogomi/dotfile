@@ -24,13 +24,13 @@ do
 done
 
 mkdir -p ~/.vimcache/bak/
-mkdir ~/.vimcache/vimswap/
-mkdir ~/.vimcache/undo/
+mkdir -p ~/.vimcache/vimswap/
+mkdir -p ~/.vimcache/undo/
 mkdir -p ~/.cache/shell
 
 mkdir -p ~/.nvimcache/bak/
-mkdir ~/.nvimcache/vimswap/
-mkdir ~/.nvimcache/undo/
+mkdir -p ~/.nvimcache/vimswap/
+mkdir -p ~/.nvimcache/undo/
 
 mkdir -p ${HOME}/bin
 ln -sf ${PWD}/bin/* ${HOME}/bin
@@ -52,6 +52,11 @@ if [ -d ~/.claude-work/projects ]; then
   rm -rf ~/.claude-work/projects
 fi
 ln -sfn ~/.claude/projects ~/.claude-work/projects
+# 最小構成のDebianなどにはcurlが入っていないため、最初に使う前に入れておく
+if [ "$(uname -s)" == "Linux" ] && ! command -v curl >/dev/null 2>&1; then
+  sudo apt update
+  sudo apt install -y curl
+fi
 # Claude Codeは未インストールの場合のみインストールする
 if ! command -v claude >/dev/null 2>&1; then
   curl -fsSL https://claude.ai/install.sh | bash
@@ -91,6 +96,9 @@ if [ -d ~/.claude-personal/agents ]; then rm -rf ~/.claude-personal/agents; fi
 ln -sfn ${PWD}/claude/agents ~/.claude-personal/agents
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+# インストーラは実行中のシェルにnvmを読み込まないため、ここで読み込む
+export NVM_DIR="${HOME}/.nvm"
+[ -s "${NVM_DIR}/nvm.sh" ] && . "${NVM_DIR}/nvm.sh"
 nvm install --lts
 
 # Macだったらbrewで、Linuxだったらaptで必要なものを入れる
@@ -105,14 +113,16 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
    sudo apt update
    sudo apt install -y tmux zsh xclip jq
    ARCH=$(uname -m)
+   # ダウンロードに失敗したときに既存のNeovimを消さないよう、成功時のみ置き換える
+   NVIM_URL_BASE="https://github.com/neovim/neovim/releases/latest/download"
    if [ "${ARCH}" == "aarch64" ]; then
-       curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
-       sudo rm -rf /opt/nvim-linux-arm64
-       sudo tar -C /opt -xzf nvim-linux-arm64.tar.gz
+       curl -fLO ${NVIM_URL_BASE}/nvim-linux-arm64.tar.gz \
+         && sudo rm -rf /opt/nvim-linux-arm64 \
+         && sudo tar -C /opt -xzf nvim-linux-arm64.tar.gz
    else
-       curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-       sudo rm -rf /opt/nvim-linux-x86_64
-       sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+       curl -fLO ${NVIM_URL_BASE}/nvim-linux-x86_64.tar.gz \
+         && sudo rm -rf /opt/nvim-linux-x86_64 \
+         && sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
    fi
 
    # aptにも存在するが、文字化けする。
