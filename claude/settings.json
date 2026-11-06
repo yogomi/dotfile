@@ -29,6 +29,7 @@
       "Bash(git push *)"
     ]
   },
+  "model": "opus",
   "hooks": {
     "PostToolUse": [
       {
@@ -109,6 +110,5 @@
       "**Org-specific CLIs**: None configured",
       "commit and push only when explicitly requested by the user (per ~/.claude/CLAUDE.md: 絶対禁止事項 — do not self-propose commit/push); never use `git add -A` or `git add .`, always stage files by explicit name"
     ]
-  },
-  "model": "opus"
+  }
 }
