@@ -116,5 +116,5 @@
 
 妻アロナが徳島県美馬市で立ち上げたアートセンター事業。
 UCG・ウクライナ文化の箱庭に関する話題が出たら、まず
-`~/workspace/fine-thread/ucg/INDEX.md` を読むこと。
+`~/workspace/tsuzura/projects/ucg/README.md` を読むこと。
 PC内および外部サービスにある資料の所在と、プロジェクトの基本情報がまとまっている。
