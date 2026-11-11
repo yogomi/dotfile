@@ -1,4 +1,5 @@
 #!/bin/bash
 # workプロファイルはFableを既定にする。settings.jsonはプロファイル間で共有のため、
 # モデルは起動時の --model で上書きする（セッション限りの指定なので他プロファイルに漏れない）
-CLAUDE_CONFIG_DIR=~/.claude-work exec ~/bin/claude-project --model 'claude-fable-5[1m]' "$@"
+# バージョンを固定せず、エイリアス fable で常に最新のFableに解決させる
+CLAUDE_CONFIG_DIR=~/.claude-work exec ~/bin/claude-project --model 'fable[1m]' "$@"
