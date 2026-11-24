@@ -137,6 +137,9 @@ fi
 
 alias ll='ls -alh'
 
+# Wake-on-LAN で Windows PC（MSI MAG B860 TOMAHAWK WIFI）を起動する
+alias wake-win='wakeonlan 34:5A:60:3C:D5:B1'
+
 if which peco > /dev/null; then
     echo 'use peco'
     source ~/.zsh/zrc.peco.zsh
